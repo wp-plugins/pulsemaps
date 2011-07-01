@@ -58,3 +58,22 @@
 	border-radius: 4px;
 	text-decoration: none;
 }
+
+#pulsemaps_widget_wrap {
+	width: 900px;
+}
+
+#pulsemaps_widget_preview {
+	margin-top: 15px;
+	width: 500px;			  
+	float: right;
+}
+
+#pulsemaps_widget_settings {
+	float: left;
+	width: 400px;
+}
+
+#pulsemaps_widget_wrap .form-table th {
+	width: 100px;
+}

@@ -3,7 +3,7 @@
 Plugin Name: PulseMaps
 Plugin URI: http://pulsemaps.com/wordpress/
 Description: Show off your visitors on the world map.  When people around the world visit your blog, the corresponding areas on the heat map widget light up!
-Version: 1.0
+Version: 1.1
 Author: Aito Software Inc.
 License: GPLv2 or later
 */
@@ -38,7 +38,6 @@ function pulsemaps_register() {
 	curl_setopt($c, CURLOPT_POSTFIELDS, $data);
 	curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 	$ret = curl_exec($c);
-	error_log($ret);
 	$code = curl_getinfo($c, CURLINFO_HTTP_CODE);
 	curl_close($c);
 
@@ -46,27 +45,55 @@ function pulsemaps_register() {
 }
 
 
-function pulsemaps_install () {
-	$opts = get_option('pulsemaps_options', array());
-	if (!isset($opts['key']) || !isset($opts['id'])) {
-		$ret = pulsemaps_register();
-		error_log(json_encode($ret));
-		if ($ret['status'] == 'ok') {
-			$opts['key'] = $ret['key'];
-			$opts['id'] = $ret['id'];
+function pulsemaps_upgrade($opts) {
+	// Upgrade possible old widget style option.
+	$style = get_option('pulsemaps_widget', null);
+	if ($style !== null) {
+		delete_option('pulsemaps_widget');
+		$opts['widget_width'] = 220;
+		$opts['widget_color'] = 'F2EFE8';
+		$opts['widget_bgcolor'] = '99B2CF';
+		$opts['custom_color'] = 'F2EFE8';
+		$opts['custom_bgcolor'] = '99B2CF';
+		$opts['widget_type'] = 'plain';
+		if ($style == 'satellite') {
+			$opts['widget_type'] = 'satellite';
+		} else if ($style == 'monochrome') {
+			$opts['widget_bgcolor'] = '3B3B3B';
 		}
 	}
+
+	global $pulsemaps_version;
+	$opts['version'] = $pulsemaps_version;
+
 	update_option('pulsemaps_options', $opts);
+}
 
-	if (!get_option('pulsemaps_widget', null)) {
-		update_option('pulsemaps_widget', 'default');
-	}
 
-	if (!isset($opts['widget'])) {
-		$opts['widget'] = 'default';
+add_action('plugins_loaded', 'pulsemaps_upgrade_check');
+function pulsemaps_upgrade_check() {
+	global $pulsemaps_version;
+
+	$opts = get_option('pulsemaps_options', array());
+	if (!isset($opts['version']) || $opts['version'] < $pulsemaps_version) {
+		pulsemaps_upgrade($opts);
 	}
 }
 
 
 register_activation_hook(__FILE__, 'pulsemaps_install');
-register_deactivation_hook(__FILE__, 'pulsemaps_uninstall');
+function pulsemaps_install() {
+	$opts = get_option('pulsemaps_options', array());
+
+	if (!isset($opts['key']) || !isset($opts['id'])) {
+		$ret = pulsemaps_register();
+		if ($ret['status'] == 'ok') {
+			$opts['key'] = $ret['key'];
+			$opts['id'] = $ret['id'];
+		} else {
+			error_log(json_encode($ret));
+		}
+
+		update_option('pulsemaps_options', $opts);
+	}
+}
