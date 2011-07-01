@@ -9,7 +9,7 @@ Requires at least: 2.9
 Tested up to: 3.1.4
 Stable tag: trunk
 
-Show off the wordwide readership of your blog with the free PulseMaps Visitor Map plugin! When people around the world visit your blog, the corresponding areas on the map widget light up.
+Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
 == Description ==
 
@@ -33,6 +33,10 @@ The widget size and colors are fully customizable; you can choose any colors and
 4. Zoom in for a closer look!
 
 == Changelog ==
+
+= 1.1.1 =
+
+* Fixed readme.
 
 = 1.1 =
 
