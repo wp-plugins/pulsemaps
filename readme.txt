@@ -34,6 +34,10 @@ The widget size and colors are fully customizable; you can choose any colors and
 
 == Changelog ==
 
+= 1.1.2 =
+
+* Fixed some issues on first install.
+
 = 1.1.1 =
 
 * Fixed readme.
