@@ -37,6 +37,7 @@ class PulseMapsWidget extends WP_Widget {
 		$opts = get_option('pulsemaps_options');
 		$id = $opts['id'];
 		$width = $opts['widget_width'];
+		echo "<a href=\"http://app.pulsemaps.com/maps/$id/\" title=\"Visitor tracking by PulseMaps.com\">";
 		if ($opts['widget_type'] == 'satellite') {
 			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id&type=satellite&width=$width\"></script>";
 		} else {
@@ -44,7 +45,7 @@ class PulseMapsWidget extends WP_Widget {
 			$bgcolor = $opts['widget_bgcolor'];
 			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id&width=$width&color=$color&bgcolor=$bgcolor\"></script>";
 		}
-		echo "<a style=\"color: rgba(40,40,40,0.5);\" href=\"http://pulsemaps.com/\">Visitor tracking by PulseMaps.com</a>";
+		echo "</a>";
 
 		echo $after_widget;
 	}

@@ -79,8 +79,9 @@ function pulsemaps_options_page() {
 <p>Current plan: <strong>free</strong></p>
 <ul>
 <li>Only pages which include the PulseMaps widget will be tracked.</li>
+<li>30 days of history.</li>
+<li>At most 1000 daily visitors (on average) are recorded.</li>
 <li>Ads may be displayed on the widget.</li>
-<li>A link to pulsemaps.com is included on the map widget.</li>
 </ul>
 <p>
 A future version of the plugin will allow you to upgrade to a paid plan for visitor tracking without the widget, no ads, longer history, and more.

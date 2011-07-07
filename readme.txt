@@ -4,9 +4,9 @@ Author: aitosoftware (Aito Software Inc.)
 Author URI: http://pulsemaps.com/
 Plugin URI: http://pulsemaps.com/wordpress/
 Donate link: http://pulsemaps.com/pricing/
-Tags: visitor map, statistics, heat map, cluster map
+Tags: visitor map, statistics, heat map, cluster map, hit counter
 Requires at least: 2.9
-Tested up to: 3.1.4
+Tested up to: 3.2
 Stable tag: trunk
 
 Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
@@ -16,6 +16,8 @@ Show off your visitors on the world map. When people around the world visit your
 The PulseMaps plugin visualizes your site visitors' locations on the world map.  The plugin includes a map widget which you place on the pages you want to track.  The areas where you get the most visitors are shown with a lighter color.
 
 Simply drop the widget on your blog's sidebar. The map widget will work as a form of “social proof” : your visitors see that your blog is being read by people all over the world. This makes your blog instantly more trustworthy–who would trust a blog nobody reads? With this widget, you show readers that your site DOES get visitors. As an added bonus, the map just looks pretty dang cool!
+
+Click on the widget to get to a large map which can be freely zoomed and panned.
 
 The widget size and colors are fully customizable; you can choose any colors and size you wish on the admin panel.  The admin panel also has a larger version of the map (using Google Maps) which you can zoom and pan freely, all the way down to city level.
 
@@ -33,6 +35,13 @@ The widget size and colors are fully customizable; you can choose any colors and
 4. Zoom in for a closer look!
 
 == Changelog ==
+
+= 1.2 =
+
+* Clickable map widget opens large map view which can be freely zoomed and panned.
+* Text link removed.
+* Limits documented.
+* Tested on WordPress 3.2
 
 = 1.1.2 =
 
