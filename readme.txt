@@ -4,7 +4,7 @@ Author: aitosoftware (Aito Software Inc.)
 Author URI: http://pulsemaps.com/
 Plugin URI: http://pulsemaps.com/wordpress/
 Donate link: http://pulsemaps.com/pricing/
-Tags: visitor map, statistics, heat map, cluster map, hit counter
+Tags: visitor map, statistics, heat map, cluster map, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
 Requires at least: 2.9
 Tested up to: 3.2
 Stable tag: 1.2
@@ -15,11 +15,22 @@ Show off your visitors on the world map. When people around the world visit your
 
 The PulseMaps plugin visualizes your site visitors' locations on the world map.  The plugin includes a map widget which you place on the pages you want to track.  The areas where you get the most visitors are shown with a lighter color.
 
+For a live demo, visit the [PulseMaps Blog](http://pulsemaps.com/blog/) and the [detail page for PulseMaps Blog visitors](http://app.pulsemaps.com/maps/526958181/).
+
 Simply drop the widget on your blog's sidebar. The map widget will work as a form of “social proof” : your visitors see that your blog is being read by people all over the world. This makes your blog instantly more trustworthy–who would trust a blog nobody reads? With this widget, you show readers that your site DOES get visitors. As an added bonus, the map just looks pretty dang cool!
 
-Click on the widget to get to a large map which can be freely zoomed and panned.
+Click on the widget to get to a detail page sporting a huge map which can be freely zoomed and panned, along with other interesting details and statistics.
 
-The widget size and colors are fully customizable; you can choose any colors and size you wish on the admin panel.  The admin panel also has a larger version of the map (using Google Maps) which you can zoom and pan freely, all the way down to city level.
+The widget size and colors are fully customizable; you can choose any colors and size you wish on the admin panel.
+
+Features
+--------
+ * Map widget shows visitors in real time
+ * Customizable map widget size and colors
+ * Click on map to open a large map with more details and statistics
+ * Works on all popular browsers
+ * Lightweight plugin (does not need a lot of disk space)
+ * Free
 
 == Installation ==
 
@@ -30,9 +41,10 @@ The widget size and colors are fully customizable; you can choose any colors and
 == Screenshots ==
 
 1. The PulseMaps widget on a blog sidebar
-2. Choose from a selection of widget styles
+2. Freely choose your widget style, size, and colors
 3. Admin dashboard shows a larger map
 4. Zoom in for a closer look!
+5. Click the widget for more details and statistics about your visitors.
 
 == Changelog ==
 
