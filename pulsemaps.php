@@ -3,7 +3,7 @@
 Plugin Name: PulseMaps
 Plugin URI: http://pulsemaps.com/wordpress/
 Description: Show off your visitors on the world map.  When people around the world visit your blog, the corresponding areas on the heat map widget light up!
-Version: 1.1.1
+Version: 1.2
 Author: Aito Software Inc.
 License: GPLv2 or later
 */
@@ -31,7 +31,6 @@ require_once('settings.php');
 function pulsemaps_register() {
 	global $pulsemaps_api;
 	$c = curl_init($pulsemaps_api . '/register');
-	error_log($pulsemaps_api . '/register');
 	$data = array('name' => get_option('blogname'),
 				  'email' => get_option('admin_email'),
 				  'url' => get_option('home'));
@@ -93,7 +92,26 @@ function pulsemaps_install() {
 		} else {
 			error_log(json_encode($ret));
 		}
-
-		update_option('pulsemaps_options', $opts);
 	}
+
+	if (!isset($opts['widget_width'])) {
+		$opts['widget_width'] = 220;
+	}
+	if (!isset($opts['widget_color'])) {
+		$opts['widget_color'] = 'F2EFE8';
+	}
+	if (!isset($opts['widget_bgcolor'])) {
+		$opts['widget_bgcolor'] = '99B2CF';
+	}
+	if (!isset($opts['custom_color'])) {
+		$opts['custom_color'] = 'F2EFE8';
+	}
+	if (!isset($opts['custom_bgcolor'])) {
+		$opts['custom_bgcolor'] = '99B2CF';
+	}
+	if (!isset($opts['widget_type'])) {
+		$opts['widget_type'] = 'plain';
+	}
+
+	update_option('pulsemaps_options', $opts);
 }
