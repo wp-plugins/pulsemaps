@@ -7,7 +7,7 @@ Donate link: http://pulsemaps.com/pricing/
 Tags: visitor map, statistics, heat map, cluster map
 Requires at least: 2.9
 Tested up to: 3.1.4
-Stable tag: trunk
+Stable tag: 1.1.2
 
 Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
