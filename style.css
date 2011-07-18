@@ -69,6 +69,11 @@
 	float: right;
 }
 
+#pulsemaps_widget_bg {
+	background-image: url('transparent-bg.gif');
+        display: inline-block;
+}
+
 #pulsemaps_widget_settings {
 	float: left;
 	width: 400px;

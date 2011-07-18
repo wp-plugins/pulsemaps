@@ -126,7 +126,7 @@ function pulsemaps_widget_section() {
 	<div id="pulsemaps_widget_wrap">
 		<div id="pulsemaps_widget_preview">
 		     Widget preview:<br/>
-             <div id="widget-preview"></div>
+		     <div id="pulsemaps_widget_bg"><div id="widget-preview"></div></div>
         </div>
         <div id="pulsemaps_widget_settings">
 <?php
@@ -195,6 +195,9 @@ function pulsemaps_widget_bgcolor() {
 	case '3B3B3B':
 		$choice = 'dark';
 		break;
+	case 'transparent':
+		$choice = 'transparent';
+		break;
 	default:
 		$choice = 'custom';
 	}
@@ -204,6 +207,8 @@ function pulsemaps_widget_bgcolor() {
 	<label for="bgcolor-default">Default</label><br/>
 	<input id="bgcolor-dark" class="widget-param widget-plain" type="radio" name="widget_bgcolor" value="dark" <?php checked('dark', $choice); ?> />
 	<label for="bgcolor-dark">Dark</label><br/>
+	<input id="bgcolor-transparent" class="widget-param widget-plain" type="radio" name="widget_bgcolor" value="transparent" <?php checked('transparent', $choice); ?> />
+	<label for="bgcolor-transparent">Transparent</label><br/>
 	<input id="bgcolor-custom" class="widget-param widget-plain" type="radio" name="widget_bgcolor" value="custom" <?php checked('custom', $choice); ?> />
 	<label for="bgcolor-custom">Custom</label>
 	<input id="widget-bgcolor" name="pulsemaps_options[widget_bgcolor]" size="6" type="hidden" value="<?php echo $color; ?>" />
@@ -224,7 +229,11 @@ function pulsemaps_validate_regex(&$options, $input, $field, $regex, $filter = n
 }
 
 function pulsemaps_validate_color(&$options, $input, $field) {
-	pulsemaps_validate_regex($options, $input, $field, '/^[a-fA-F0-9]{6}$/i', 'strtoupper');
+	if ($input[$field] == 'transparent') {
+		$options[$field] = 'transparent';
+	} else {
+		pulsemaps_validate_regex($options, $input, $field, '/^[a-fA-F0-9]{6}$/i', 'strtoupper');
+	}
 }
 
 

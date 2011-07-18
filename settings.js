@@ -16,6 +16,8 @@ pulsemaps.updatePreview = function(url) {
 	bgcolor = jQuery('#custom-bgcolor').val();
     } else if (csel == 'dark') {
 	bgcolor = '3b3b3b';
+    } else if (csel == 'transparent') {
+	bgcolor = 'transparent';
     }
     jQuery('input[name="pulsemaps_options[widget_bgcolor]"]').val(bgcolor);
 
