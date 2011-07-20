@@ -1,6 +1,8 @@
 var pulsemaps = pulsemaps || {};
 
 pulsemaps.updatePreview = function(url) {
+    window.onbeforeunload = function() { return "Your changes haven't been saved, are you sure you want to leave the page?"; };
+
     // Get the selected color.
     var color = 'F2EFE8';
     var csel = jQuery("input[name='widget_color']:checked").val();
@@ -45,4 +47,5 @@ pulsemaps.setHooks = function(url) {
     jQuery('input.widget-param').change(function() {
 	pulsemaps.updatePreview(url);
     });
+    jQuery("form").submit(function() { window.onbeforeunload = null; });
 }
