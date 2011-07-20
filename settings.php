@@ -61,11 +61,17 @@ function pulsemaps_admin_add_page() {
 	add_action('admin_footer', 'pulsemaps_admin_footer');
 }
 
+
 function pulsemaps_options_page() {
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
 	$style = get_option('pulsemaps_widget', 'default');
 	global $pulsemaps_api;
+	if (!is_active_widget(false, false, 'pulsemapswidget', true)) {
+		echo '<div class="error"><p><strong>Visitor tracking is inactive. Drag the PulseMaps widget on a sidebar on the <a href="';
+		echo get_option('siteurl') . '/wp-admin/widgets.php';
+		echo '">widget admin page</a>.</strong></p></div>';
+	}
 ?>
 <div class="wrap">
 <div id="icon-options-general" class="icon32"><br></div>

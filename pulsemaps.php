@@ -114,4 +114,33 @@ function pulsemaps_install() {
 	}
 
 	update_option('pulsemaps_options', $opts);
+
 }
+
+
+function pulsemaps_activate_notice() {
+	if (substr($_SERVER["PHP_SELF"], -11) == 'plugins.php'
+		&& !is_active_widget(false, false, 'pulsemapswidget', true)) {
+		echo '<div class="error"><p><strong>Activate PulseMaps visitor tracking on the <a href="';
+		echo get_option('siteurl') . '/wp-admin/widgets.php';
+		echo '">widget admin page</a>.  Check also the <a href="';
+		echo get_option('siteurl') . '/wp-admin/options-general.php?page=pulsemaps';
+        echo '">settings page</a>.</strong></p></div>';
+	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php'
+			   && !is_active_widget(false, false, 'pulsemapswidget', true)) {
+		echo '<div class="error"><p><strong>Drag the PulseMaps widget to a sidebar on the right to activate.</p></div>';
+	}
+}
+
+add_action('admin_notices', 'pulsemaps_activate_notice');
+
+
+function pulsemaps_plugin_actions($links, $file) {
+	if ($file == 'pulsemaps/pulsemaps.php') {
+		$link = '<a href="'. get_option('siteurl') . '/wp-admin/options-general.php?page=pulsemaps' . '">Settings</a>';
+		array_unshift($links, $link);
+	}
+	return $links;
+}
+
+add_filter('plugin_action_links', 'pulsemaps_plugin_actions', 10, 2);
