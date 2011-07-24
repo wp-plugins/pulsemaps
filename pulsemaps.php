@@ -62,6 +62,10 @@ function pulsemaps_upgrade($opts) {
 		}
 	}
 
+	if (!isset($opts['plan'])) {
+		$opts['plan'] = 'free';
+	}
+
 	global $pulsemaps_version;
 	$opts['version'] = $pulsemaps_version;
 
@@ -117,18 +121,24 @@ function pulsemaps_install() {
 
 }
 
+function pulsemaps_tracking_active() {
+	if (is_active_widget(false, false, 'pulsemapswidget', true)) {
+		return true;
+	}
+	$opts = get_option('pulsemaps_options', array());
+	return $opts['plan'] != 'free';
+}
+
 
 function pulsemaps_activate_notice() {
-	if (substr($_SERVER["PHP_SELF"], -11) == 'plugins.php'
-		&& !is_active_widget(false, false, 'pulsemapswidget', true)) {
+	if (substr($_SERVER["PHP_SELF"], -11) == 'plugins.php' && !pulsemaps_tracking_active()) {
 		echo '<div class="error"><p><strong>Activate PulseMaps visitor tracking on the <a href="';
 		echo get_option('siteurl') . '/wp-admin/widgets.php';
 		echo '">widget admin page</a>.  Check also the <a href="';
 		echo get_option('siteurl') . '/wp-admin/options-general.php?page=pulsemaps';
         echo '">settings page</a>.</strong></p></div>';
-	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php'
-			   && !is_active_widget(false, false, 'pulsemapswidget', true)) {
-		echo '<div class="error"><p><strong>Drag the PulseMaps widget to a sidebar on the right to activate.</p></div>';
+	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php' && !pulsemaps_tracking_active()) {
+	    echo '<div class="error"><p><strong>Drag the PulseMaps widget to a sidebar on the right to activate.</p></div>';
 	}
 }
 

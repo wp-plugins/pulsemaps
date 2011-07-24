@@ -67,7 +67,7 @@ function pulsemaps_options_page() {
 	$id = $opts['id'];
 	$style = get_option('pulsemaps_widget', 'default');
 	global $pulsemaps_api;
-	if (!is_active_widget(false, false, 'pulsemapswidget', true)) {
+	if (!pulsemaps_tracking_active()) {
 		echo '<div class="error"><p><strong>Visitor tracking is inactive. Drag the PulseMaps widget on a sidebar on the <a href="';
 		echo get_option('siteurl') . '/wp-admin/widgets.php';
 		echo '">widget admin page</a>.</strong></p></div>';
@@ -77,25 +77,36 @@ function pulsemaps_options_page() {
 <div id="icon-options-general" class="icon32"><br></div>
 <h2>PulseMaps Visitor Map</h2>
 <div id="pulsemaps_plan">
-<?php
-	if (!isset($opts['plan'])) {
-?>
 <div id="pulsemaps_descr">
   <h3>Plan</h3>
-<p>Current plan: <strong>free</strong></p>
+<?php
+    if ($opts['plan'] == 'free') {
+?>
+<p>If you like this plugin please consider one or more of the following: rate the plugin <a href="http://wordpress.org/extend/plugins/pulsemaps/">in the Plugin Directory</a>, like <a href="https://www.facebook.com/pages/PulseMaps/209142965794390">our Facebook page</a>, or <a href="http://twitter.com/#!/PulseMaps">follow us on Twitter</a>. <strong>Thanks for your support!</strong></p>
+<p>Current plan: <strong><?php echo $opts['plan']; ?></strong></p>
 <ul>
 <li>Only pages which include the PulseMaps widget will be tracked.</li>
-<li>30 days of history.</li>
-<li>At most 1000 daily visitors (on average) are recorded.</li>
+<li>At most 30 days or 30000 visits worth of history.</li>
 <li>Ads may be displayed on the widget.</li>
 </ul>
-<p>
-A future version of the plugin will allow you to upgrade to a paid plan for visitor tracking without the widget, no ads, longer history, and more.
-</p>
-</div>
+<table><tr><td>
+<strong>Upgrade</strong> for unlimited history, tracking visitors without the widget, private maps, no ads, and more.
+</td><td>
+<form id="pulsemaps_upgrade" action="<?php echo $pulsemaps_api; ?>/upgrade/" method="post">
+<input name="key" type="hidden" value="<?php echo $opts['key']; ?>" />
+<input name="submit" type="submit" class="pulsemaps_btn" value="More Info" />
+</form>
+</td></tr></table>
 <?php
-	}
+	 } else {
 ?>
+<p>Current plan: <strong><?php echo $opts['plan']; ?></strong></p>
+<p>Congratulations, you are on the VIP list :)</p>
+<p>All visits are now recorded even on pages which don't include the widget.</p>
+<?php
+	 }
+?>
+</div>
 <div id="pulsemaps_map"></div>
 </div>
 <script type="text/javascript" id="pulsemaps_<?php echo $id; ?>" src="<?php echo $pulsemaps_api; ?>/map.js?id=<?php echo $id; ?>&target=pulsemaps_map"></script>

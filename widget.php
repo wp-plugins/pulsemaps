@@ -72,7 +72,7 @@ add_action('widgets_init', create_function('', 'return register_widget("PulseMap
 
 
 function pulsemaps_widgets_style() {
-	if (!is_active_widget(false, false, 'pulsemapswidget', true)) {
+	if (!pulsemaps_tracking_active()) {
 		?>
 <style type="text/css">
 div.widget[id*=_pulsemapswidget] .widget-title {
