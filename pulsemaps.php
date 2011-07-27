@@ -26,7 +26,7 @@ License: GPLv2 or later
 
 require_once('config.php');
 require_once('widget.php');
-require_once('settings.php');
+require_once('settings_page.php');
 
 function pulsemaps_register() {
 	global $pulsemaps_api;
