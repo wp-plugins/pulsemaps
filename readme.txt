@@ -7,7 +7,7 @@ Donate link: http://pulsemaps.com/pricing/
 Tags: visitor map, statistics, heat map, cluster map, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
 Requires at least: 2.9
 Tested up to: 3.2
-Stable tag: 1.2
+Stable tag: 1.3
 
 Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
@@ -30,7 +30,7 @@ Features
  * Click on map to open a large map with more details and statistics
  * Works on all popular browsers
  * Lightweight plugin (does not need a lot of disk space)
- * Free
+ * Free (but paid plan available for extra features)
 
 == Installation ==
 
@@ -47,6 +47,14 @@ Features
 5. Click the widget for more details and statistics about your visitors.
 
 == Changelog ==
+
+= 1.3 =
+
+* Support for transparent background in map widget.
+* Option for opening map detail page in a new window.
+* Warn user if tracking not enabled.
+* Warn user about unsaved changes on settings page.
+* Support for upgrading to VIP plan (keep history, higher page view limit, tracking without widget)
 
 = 1.2 =
 
