@@ -3,7 +3,7 @@
 Plugin Name: PulseMaps
 Plugin URI: http://pulsemaps.com/wordpress/
 Description: Show off your visitors on the world map.  When people around the world visit your blog, the corresponding areas on the heat map widget light up!
-Version: 1.3
+Version: 1.3.1
 Author: Aito Software Inc.
 License: GPLv2 or later
 */
