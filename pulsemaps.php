@@ -66,6 +66,10 @@ function pulsemaps_upgrade($opts) {
 		$opts['plan'] = 'free';
 	}
 
+	if (!isset($opts['widget_new_window'])) {
+		$opts['widget_new_window'] = false;
+	}
+
 	global $pulsemaps_version;
 	$opts['version'] = $pulsemaps_version;
 

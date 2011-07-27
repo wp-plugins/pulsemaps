@@ -35,6 +35,7 @@ function pulsemaps_admin_scripts() {
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
 	$widget_url = "$pulsemaps_api/widget.js?id=$id&target=widget-preview";
+    $url_load = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/plan.php';
 ?>
 <script type='text/javascript'>
   function updatePreview() {
@@ -42,6 +43,7 @@ function pulsemaps_admin_scripts() {
   }
   jQuery(document).ready(function() {
 	pulsemaps.setHooks('<?php echo $widget_url; ?>');
+	jQuery("#pulsemaps_plan_load").load("<?php echo $url_load; ?>", {key: "<?php echo $options['key']; ?>"});
   });
 </script>
 <?php
@@ -61,12 +63,13 @@ function pulsemaps_admin_add_page() {
 	add_action('admin_footer', 'pulsemaps_admin_footer');
 }
 
-
 function pulsemaps_options_page() {
+	//	pulsemaps_update_plan();
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
 	$style = get_option('pulsemaps_widget', 'default');
 	global $pulsemaps_api;
+    $siteurl = get_option('siteurl');
 	if (!pulsemaps_tracking_active()) {
 		echo '<div class="error"><p><strong>Visitor tracking is inactive. Drag the PulseMaps widget on a sidebar on the <a href="';
 		echo get_option('siteurl') . '/wp-admin/widgets.php';
@@ -78,34 +81,9 @@ function pulsemaps_options_page() {
 <h2>PulseMaps Visitor Map</h2>
 <div id="pulsemaps_plan">
 <div id="pulsemaps_descr">
-  <h3>Plan</h3>
-<?php
-    if ($opts['plan'] == 'free') {
-?>
-<p>If you like this plugin please consider one or more of the following: rate the plugin <a href="http://wordpress.org/extend/plugins/pulsemaps/">in the Plugin Directory</a>, like <a href="https://www.facebook.com/pages/PulseMaps/209142965794390">our Facebook page</a>, or <a href="http://twitter.com/#!/PulseMaps">follow us on Twitter</a>. <strong>Thanks for your support!</strong></p>
-<p>Current plan: <strong><?php echo $opts['plan']; ?></strong></p>
-<ul>
-<li>Only pages which include the PulseMaps widget will be tracked.</li>
-<li>At most 30 days or 30000 visits worth of history.</li>
-<li>Ads may be displayed on the widget.</li>
-</ul>
-<table><tr><td>
-<strong>Upgrade</strong> for unlimited history, tracking visitors without the widget, private maps, no ads, and more.
-</td><td>
-<form id="pulsemaps_upgrade" action="<?php echo $pulsemaps_api; ?>/upgrade/" method="post">
-<input name="key" type="hidden" value="<?php echo $opts['key']; ?>" />
-<input name="submit" type="submit" class="pulsemaps_btn" value="More Info" />
-</form>
-</td></tr></table>
-<?php
-	 } else {
-?>
-<p>Current plan: <strong><?php echo $opts['plan']; ?></strong></p>
-<p>Congratulations, you are on the VIP list :)</p>
-<p>All visits are now recorded even on pages which don't include the widget.</p>
-<?php
-	 }
-?>
+<div id="pulsemaps_plan_load">
+<img src="<?php echo $siteurl; ?>/wp-admin/images/loading.gif" alt="loading...">
+</div>
 </div>
 <div id="pulsemaps_map"></div>
 </div>
@@ -136,6 +114,8 @@ function pulsemaps_admin_init(){
 	add_settings_field('pulsemaps_widget_size',   'Width', 'pulsemaps_widget_width',  'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_color',  'Color', 'pulsemaps_widget_color', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_bgcolor','Background', 'pulsemaps_widget_bgcolor', 'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_open',   'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_track_all',   'Track pages without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
 }
 
 function pulsemaps_widget_section() {
@@ -151,11 +131,7 @@ function pulsemaps_widget_section() {
 
 function pulsemaps_widget_type() {
 	 $options = get_option('pulsemaps_options');
-     if (isset($options['widget_type'])) {  // XXX get rid of this
-		 $type = $options['widget_type'];
-	 } else {
-		 $type = 'plain';
-	 }
+	 $type = $options['widget_type'];
 ?>
 	 <input id="widget-plain" class="widget-param" type="radio" name="pulsemaps_options[widget_type]" value="plain" <?php checked('plain', $type); ?> />
 	 <label for="widget-plain">Plain</label><br/>
@@ -166,14 +142,19 @@ function pulsemaps_widget_type() {
 
 function pulsemaps_widget_width() {
 	$options = get_option('pulsemaps_options');
-	if (isset($options['widget_width'])) { // XXX get rid of this
-		$width = $options['widget_width'];
-	} else {
-		$width = 220;
-	}
+	$width = $options['widget_width'];
 ?>
 	<input id="widget-width" class="widget-param" name="pulsemaps_options[widget_width]" size="4" type="text" value="<?php echo $width; ?>" />
 	<br/><span class="description">Width in pixels (at least 50, at most 500).</span>
+<?php
+}
+
+function pulsemaps_widget_opennew() {
+	$options = get_option('pulsemaps_options');
+	$new_window = $options['widget_new_window'];
+?>
+	<input id="widget-new-window" class="widget-param" type="checkbox" name="pulsemaps_options[widget_new_window]" value="1" <?php checked(1 == $new_window); ?> />
+	<label for="widget-new-window">Open map details page in new window.</label>
 <?php
 }
 
@@ -276,6 +257,12 @@ function pulsemaps_options_validate($input) {
 		if ($width >= 50 && $width <= 500) {
 			$options['widget_width'] = $width;
 		}
+	}
+
+	if (isset($input['widget_new_window'])) {
+		$options['widget_new_window'] = true;
+	} else {
+		$options['widget_new_window'] = false;
 	}
 
 	return $options;
