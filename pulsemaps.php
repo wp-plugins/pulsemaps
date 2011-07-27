@@ -70,6 +70,10 @@ function pulsemaps_upgrade($opts) {
 		$opts['widget_new_window'] = false;
 	}
 
+	if (!isset($opts['track_all'])) {
+		$opts['track_all'] = false;
+	}
+
 	global $pulsemaps_version;
 	$opts['version'] = $pulsemaps_version;
 
@@ -130,7 +134,7 @@ function pulsemaps_tracking_active() {
 		return true;
 	}
 	$opts = get_option('pulsemaps_options', array());
-	return $opts['plan'] != 'free';
+	return $opts['track_all'];
 }
 
 
@@ -158,3 +162,22 @@ function pulsemaps_plugin_actions($links, $file) {
 }
 
 add_filter('plugin_action_links', 'pulsemaps_plugin_actions', 10, 2);
+
+
+function pulsemaps_async_tracker() {
+	$opts = get_option('pulsemaps_options');
+	if ($opts['track_all']) {
+		global $pulsemaps_api;
+		?>
+<script type="text/javascript">
+(function() {
+   var pm = document.createElement('script'); pm.type = 'text/javascript'; pm.async = true;
+   pm.src = "<?php echo $pulsemaps_api .'/tracker.js?id='.$opts['id']; ?>";
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pm, s);
+})();
+</script>
+<?php
+	}
+}
+
+add_action('wp_head', 'pulsemaps_async_tracker');

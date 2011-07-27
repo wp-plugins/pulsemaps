@@ -53,6 +53,9 @@ if ($code == '200') {
 	$d = json_decode($ret, true);
 	if ($opts['plan'] != $d['planTag']) {
 		$opts['plan'] = $d['planTag'];
+		if ($opts['plan'] == 'free') {
+			$opts['track_all'] = false;
+		}
 		update_option('pulsemaps_options', $opts);
 	}
 }

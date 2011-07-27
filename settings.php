@@ -34,7 +34,7 @@ function pulsemaps_admin_scripts() {
 	global $pulsemaps_api;
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
-	$widget_url = "$pulsemaps_api/widget.js?id=$id&target=widget-preview";
+	$widget_url = "$pulsemaps_api/widget.js?id=$id&notrack=1&target=widget-preview";
     $url_load = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/plan.php';
 ?>
 <script type='text/javascript'>
@@ -108,6 +108,7 @@ function pulsemaps_options_page() {
 
 add_action('admin_init', 'pulsemaps_admin_init');
 function pulsemaps_admin_init(){
+	$options = get_option('pulsemaps_options');
 	register_setting( 'pulsemaps_options', 'pulsemaps_options', 'pulsemaps_options_validate' );
 	add_settings_section('pulsemaps_options', 'Widget designer', 'pulsemaps_widget_section', 'pulsemaps');
 	add_settings_field('pulsemaps_widget_type',   'Type', 'pulsemaps_widget_type',  'pulsemaps', 'pulsemaps_options');
@@ -115,7 +116,9 @@ function pulsemaps_admin_init(){
 	add_settings_field('pulsemaps_widget_color',  'Color', 'pulsemaps_widget_color', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_bgcolor','Background', 'pulsemaps_widget_bgcolor', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_open',   'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_track_all',   'Track pages without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
+	if ($options['plan'] != 'free') {
+		add_settings_field('pulsemaps_track_all',   'Track without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
+	}
 }
 
 function pulsemaps_widget_section() {
@@ -155,6 +158,15 @@ function pulsemaps_widget_opennew() {
 ?>
 	<input id="widget-new-window" class="widget-param" type="checkbox" name="pulsemaps_options[widget_new_window]" value="1" <?php checked(1 == $new_window); ?> />
 	<label for="widget-new-window">Open map details page in new window.</label>
+<?php
+}
+
+function pulsemaps_track_all() {
+	$options = get_option('pulsemaps_options');
+	$track_all = $options['track_all'];
+?>
+	<input id="track-all" class="widget-param" type="checkbox" name="pulsemaps_options[track_all]" value="1" <?php checked(1 == $track_all); ?> />
+	<label for="track-all">Track also pages without the widget.</label>
 <?php
 }
 
@@ -263,6 +275,12 @@ function pulsemaps_options_validate($input) {
 		$options['widget_new_window'] = true;
 	} else {
 		$options['widget_new_window'] = false;
+	}
+
+	if (isset($input['track_all'])) {
+		$options['track_all'] = true;
+	} else {
+		$options['track_all'] = false;
 	}
 
 	return $options;
