@@ -19,13 +19,11 @@
 require_once('pm-config.php');
 
 function pulsemaps_admin_styles() {
-    $siteurl = get_option('siteurl');
     $url_css = plugins_url('style.css', __FILE__);
     echo "<link rel='stylesheet' href='$url_css' type='text/css' media='all' />\n";
 }
 
 function pulsemaps_admin_scripts() {
-    $siteurl = get_option('siteurl');
     $url_js = plugins_url('jscolor/jscolor.js', __FILE__);
     echo "<script type='text/javascript' src='$url_js'></script>\n";
     $url_js = plugins_url('settings.js', __FILE__);
