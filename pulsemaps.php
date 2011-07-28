@@ -24,9 +24,9 @@ License: GPLv2 or later
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once('config.php');
-require_once('widget.php');
-require_once('settings_page.php');
+require_once('pm-config.php');
+require_once('pm-widget.php');
+require_once('pm-settings_page.php');
 
 function pulsemaps_register() {
 	global $pulsemaps_api;

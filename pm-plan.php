@@ -21,7 +21,7 @@ header('Connection: close');
 ignore_user_abort();
 ob_start();
 
-require_once('config.php');
+require_once('pm-config.php');
 $c = curl_init($pulsemaps_api . '/mapInfo/wp/');
 $data = array('key' => $_POST['key']);
 curl_setopt($c, CURLOPT_POSTFIELDS, $data);

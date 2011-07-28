@@ -16,7 +16,7 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once('config.php');
+require_once('pm-config.php');
 
 function pulsemaps_admin_styles() {
     $siteurl = get_option('siteurl');
@@ -35,7 +35,7 @@ function pulsemaps_admin_scripts() {
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
 	$widget_url = "$pulsemaps_api/widget.js?id=$id&notrack=1&target=widget-preview";
-    $url_load = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/plan.php';
+    $url_load = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/pm-plan.php';
 ?>
 <script type='text/javascript'>
   function updatePreview() {
