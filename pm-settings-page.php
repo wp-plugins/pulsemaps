@@ -20,22 +20,22 @@ require_once('pm-config.php');
 
 function pulsemaps_admin_styles() {
     $siteurl = get_option('siteurl');
-    $url_css = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/style.css';
+    $url_css = plugins_url('style.css', __FILE__);
     echo "<link rel='stylesheet' href='$url_css' type='text/css' media='all' />\n";
 }
 
 function pulsemaps_admin_scripts() {
     $siteurl = get_option('siteurl');
-    $url_js = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/jscolor/jscolor.js';
+    $url_js = plugins_url('jscolor/jscolor.js', __FILE__);
     echo "<script type='text/javascript' src='$url_js'></script>\n";
-    $url_js = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/settings.js';
+    $url_js = plugins_url('settings.js', __FILE__);
     echo "<script type='text/javascript' src='$url_js'></script>\n";
 
 	global $pulsemaps_api;
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
 	$widget_url = "$pulsemaps_api/widget.js?id=$id&notrack=1&target=widget-preview";
-    $url_load = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/pm-plan.php';
+    $url_load = plugins_url('pm-plan.php', __FILE__);
 ?>
 <script type='text/javascript'>
   function updatePreview() {

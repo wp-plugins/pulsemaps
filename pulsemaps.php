@@ -26,7 +26,7 @@ License: GPLv2 or later
 
 require_once('pm-config.php');
 require_once('pm-widget.php');
-require_once('pm-settings_page.php');
+require_once('pm-settings-page.php');
 
 function pulsemaps_register() {
 	global $pulsemaps_api;
@@ -146,7 +146,7 @@ function pulsemaps_activate_notice() {
 		echo get_option('siteurl') . '/wp-admin/options-general.php?page=pulsemaps';
         echo '">settings page</a>.</strong></p></div>';
 	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php' && !pulsemaps_tracking_active()) {
-	    echo '<div class="error"><p><strong>Drag the PulseMaps widget to a sidebar on the right to activate.</p></div>';
+	    echo '<div class="error"><p><strong>Drag a PulseMaps widget (one is enough) to a sidebar on the right to activate.</p></div>';
 	}
 }
 
