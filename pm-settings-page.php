@@ -62,7 +62,6 @@ function pulsemaps_admin_add_page() {
 }
 
 function pulsemaps_options_page() {
-	//	pulsemaps_update_plan();
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
 	$style = get_option('pulsemaps_widget', 'default');
