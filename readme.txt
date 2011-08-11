@@ -68,6 +68,11 @@ PulseMaps keeps track of visits and page views.  A page view is recorded when a 
 
 == Changelog ==
 
+= 1.4 =
+
+* Real-time dots for recent visitors.
+* Visit counter and date.
+
 = 1.3.1 =
 
 * Fixed issue with multisite/network installations.
