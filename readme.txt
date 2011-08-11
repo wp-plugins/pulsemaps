@@ -4,7 +4,7 @@ Author: aitosoftware (Aito Software Inc.)
 Author URI: http://pulsemaps.com/
 Plugin URI: http://pulsemaps.com/wordpress/
 Donate link: http://pulsemaps.com/pricing/
-Tags: visitor map, statistics, heat map, cluster map, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
+Tags: visitor map, statistics, heat map, traffic counter, traffic widget, visitors counter, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
 Requires at least: 2.9
 Tested up to: 3.2
 Stable tag: 1.4
@@ -13,7 +13,7 @@ Show off your visitors on the world map. When people around the world visit your
 
 == Description ==
 
-The PulseMaps plugin visualizes your site visitors' locations on the world map.  The plugin includes a map widget which you place on the pages you want to track.  The areas where you get the most visitors are shown with a lighter color.
+The PulseMaps plugin visualizes your site visitors' locations on the world map.  The plugin includes a map widget which you place on the pages you want to track.  The areas where you get the most visitors are shown with a lighter color.  The most recent visitors are show as flashing dots on the map.  The total number of visits is also shown.
 
 For a live demo, visit the [PulseMaps Blog](http://pulsemaps.com/blog/) and the [detail page for PulseMaps Blog visitors](http://app.pulsemaps.com/maps/526958181/).
 
@@ -59,6 +59,12 @@ PHP 5 is with the curl extension is required.
 = Why doesn't my map show any visitors? =
 
 Make sure the map widget is present and visible on all pages you want to track.  To track visits without the widget, upgrade to the VIP plan.
+
+= Why is the visit count different from other trackers? =
+
+Tracking visits is not an exact science.  Many hit counters will increase the counter for every time a page was requested from the web server.  For various reasons, this could lead to misleadingly high visit counts.  PulseMaps only tracks actual page views by actual browsers, almost always operated by an actual human.
+
+PulseMaps keeps track of visits and page views.  A page view is recorded when a page is viewed on a browser.  Page views from the same user are grouped into visits.  A pause of 30 minutes or more between page views causes a new visit to be recorded.  So for example, if a user visits your site and views 10 pages within 5 minutes, the number on the widget is increased by only one.  If the same user comes back and views a couple more pages after an hour, a second visit is recorded.  Click through to the map details page to see the number of page views.
 
 == Changelog ==
 
