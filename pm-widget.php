@@ -37,22 +37,28 @@ class PulseMapsWidget extends WP_Widget {
 		$opts = get_option('pulsemaps_options');
 		$id = $opts['id'];
 		$width = $opts['widget_width'];
-		echo "<a ";
+		echo "<a style=\"text-decoration: none;\" ";
 		if ($opts['widget_new_window']) {
 			echo "target=\"pulsemaps\" ";
 		}
 		echo "href=\"http://app.pulsemaps.com/maps/$id/\" title=\"Visitor tracking by PulseMaps.com\">";
+		$extra = '';
 		if ($opts['track_all']) {
-			$notrack = '&notrack=1';
-		} else {
-			$notrack = '';
+			$extra .= '&notrack=1';
 		}
+		if (!$opts['widget_meta']) {
+			$extra .= '&nometa=1';
+		}
+		if (!$opts['widget_dots']) {
+			$extra .= '&nodots=1';
+		}
+
 		if ($opts['widget_type'] == 'satellite') {
-			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id$notrack&type=satellite&width=$width\"></script>";
+			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id&type=satellite&width=$width$extra\"></script>";
 		} else {
 			$color = $opts['widget_color'];
 			$bgcolor = $opts['widget_bgcolor'];
-			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id$notrack&width=$width&color=$color&bgcolor=$bgcolor\"></script>";
+			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id&width=$width&color=$color&bgcolor=$bgcolor$extra\"></script>";
 		}
 		echo "</a>";
 

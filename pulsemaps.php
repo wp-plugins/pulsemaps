@@ -74,6 +74,14 @@ function pulsemaps_upgrade($opts) {
 		$opts['track_all'] = false;
 	}
 
+	if (!isset($opts['widget_dots'])) {
+		$opts['widget_dots'] = true;
+	}
+
+	if (!isset($opts['widget_meta'])) {
+		$opts['widget_meta'] = true;
+	}
+
 	global $pulsemaps_version;
 	$opts['version'] = $pulsemaps_version;
 

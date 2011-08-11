@@ -108,11 +108,13 @@ function pulsemaps_admin_init(){
 	$options = get_option('pulsemaps_options');
 	register_setting( 'pulsemaps_options', 'pulsemaps_options', 'pulsemaps_options_validate' );
 	add_settings_section('pulsemaps_options', 'Widget designer', 'pulsemaps_widget_section', 'pulsemaps');
-	add_settings_field('pulsemaps_widget_type',   'Type', 'pulsemaps_widget_type',  'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_widget_size',   'Width', 'pulsemaps_widget_width',  'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_widget_color',  'Color', 'pulsemaps_widget_color', 'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_widget_bgcolor','Background', 'pulsemaps_widget_bgcolor', 'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_widget_open',   'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_type',    'Type', 'pulsemaps_widget_type',  'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_size',    'Width', 'pulsemaps_widget_width',  'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_color',   'Color', 'pulsemaps_widget_color', 'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_bgcolor', 'Background', 'pulsemaps_widget_bgcolor', 'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_open',    'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_dots','Real-time dots', 'pulsemaps_widget_dots', 'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_meta',    'Show count', 'pulsemaps_widget_showmeta', 'pulsemaps', 'pulsemaps_options');
 	if ($options['plan'] != 'free') {
 		add_settings_field('pulsemaps_track_all',   'Track without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
 	}
@@ -155,6 +157,26 @@ function pulsemaps_widget_opennew() {
 ?>
 	<input id="widget-new-window" class="widget-param" type="checkbox" name="pulsemaps_options[widget_new_window]" value="1" <?php checked(1 == $new_window); ?> />
 	<label for="widget-new-window">Open map details page in new window.</label>
+<?php
+}
+
+
+function pulsemaps_widget_dots() {
+	$options = get_option('pulsemaps_options');
+	$dots = $options['widget_dots'];
+?>
+	<input id="widget-dots" class="widget-param" type="checkbox" name="pulsemaps_options[widget_dots]" value="1" <?php checked(1 == $dots); ?> />
+	<label for="widget-dots">Show real-time dots.</label>
+<?php
+}
+
+
+function pulsemaps_widget_showmeta() {
+	$options = get_option('pulsemaps_options');
+	$meta = $options['widget_meta'];
+?>
+	<input id="widget-new-window" class="widget-param" type="checkbox" name="pulsemaps_options[widget_meta]" value="1" <?php checked(1 == $meta); ?> />
+	<label for="widget-new-window">Show visit count and date.</label>
 <?php
 }
 
@@ -272,6 +294,18 @@ function pulsemaps_options_validate($input) {
 		$options['widget_new_window'] = true;
 	} else {
 		$options['widget_new_window'] = false;
+	}
+
+	if (isset($input['widget_meta'])) {
+		$options['widget_meta'] = true;
+	} else {
+		$options['widget_meta'] = false;
+	}
+
+	if (isset($input['widget_dots'])) {
+		$options['widget_dots'] = true;
+	} else {
+		$options['widget_dots'] = false;
 	}
 
 	if (isset($input['track_all'])) {
