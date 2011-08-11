@@ -7,7 +7,7 @@ Donate link: http://pulsemaps.com/pricing/
 Tags: visitor map, statistics, heat map, cluster map, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
 Requires at least: 2.9
 Tested up to: 3.2
-Stable tag: 1.3.1
+Stable tag: 1.4
 
 Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
@@ -45,6 +45,20 @@ Features
 3. Admin dashboard shows a larger map
 4. Zoom in for a closer look!
 5. Click the widget for more details and statistics about your visitors.
+
+== Frequently Asked Questions ==
+
+= What browsers does the widget support? =
+
+The widget has been tested to work on all common browsers, such as Internet Explorer, Firefox, Chrome, Safari, and Opera, as well as mobile Safari and the Android browser.
+
+= What PHP versions are supported? =
+
+PHP 5 is with the curl extension is required.
+
+= Why doesn't my map show any visitors? =
+
+Make sure the map widget is present and visible on all pages you want to track.  To track visits without the widget, upgrade to the VIP plan.
 
 == Changelog ==
 
