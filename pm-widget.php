@@ -41,27 +41,42 @@ class PulseMapsWidget extends WP_Widget {
 		if ($opts['widget_new_window']) {
 			echo "target=\"pulsemaps\" ";
 		}
-		echo "href=\"http://app.pulsemaps.com/maps/$id/\" title=\"Visitor tracking by PulseMaps.com\">";
-		$extra = '';
-		if ($opts['track_all']) {
-			$extra .= '&notrack=1';
-		}
-		if (!$opts['widget_meta']) {
-			$extra .= '&nometa=1';
-		}
-		if (!$opts['widget_dots']) {
-			$extra .= '&nodots=1';
-		}
+		echo "href=\"$pulsemaps_site/maps/$id/\" title=\"Click for more details!  Visitor map widget by PulseMaps.com\">";
 
+		$url = "$pulsemaps_api/widget.js?id=$id&width=$width";
 		if ($opts['widget_type'] == 'satellite') {
-			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id&type=satellite&width=$width$extra\"></script>";
+			$url .= "&type=satellite";
 		} else {
 			$color = $opts['widget_color'];
 			$bgcolor = $opts['widget_bgcolor'];
-			echo "<script type=\"text/javascript\" id=\"pulsemaps_$id\" src=\"$pulsemaps_api/widget.js?id=$id&width=$width&color=$color&bgcolor=$bgcolor$extra\"></script>";
+			$url .= "&color=$color&bgcolor=$bgcolor$extra";
 		}
-		echo "</a>";
 
+		if ($opts['track_all']) {
+			$url .= '&notrack=1';
+		}
+		if (!$opts['widget_meta']) {
+			$url .= '&nometa=1';
+		}
+		if (!$opts['widget_dots']) {
+			$url .= '&nodots=1';
+		}
+
+?>
+<div id="pulsemaps_widget"></div>
+</a>
+<script type="text/javascript">
+	(function() {
+     var pm=document.createElement('script');
+	 pm.type = 'text/javascript';
+	 pm.async = true;
+	 pm.src = '<?php echo $url; ?>';
+	 pm.id = 'pulsemaps_<?php echo $id; ?>';
+	 var s = document.getElementById('pulsemaps_widget');
+	 s.parentNode.appendChild(pm);
+	})();
+</script>
+<?php
 		echo $after_widget;
 	}
 
