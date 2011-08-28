@@ -26,6 +26,7 @@ class PulseMapsWidget extends WP_Widget {
     function widget($args, $instance) {
 		global $wpdb;
 		global $pulsemaps_api;
+		global $pulsemaps_site;
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
 		echo $before_widget;
