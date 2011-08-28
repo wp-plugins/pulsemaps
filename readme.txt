@@ -68,6 +68,10 @@ PulseMaps keeps track of visits and page views.  A page view is recorded when a 
 
 == Changelog ==
 
+= 1.4.2 =
+
+* Link to the map details page is fixed.  
+
 = 1.4.1 =
 
 * Load widget asynchronously (so it doesn't interrupt loading the rest of the page).
