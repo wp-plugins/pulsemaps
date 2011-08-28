@@ -54,7 +54,7 @@ The widget has been tested to work on all common browsers, such as Internet Expl
 
 = What PHP versions are supported? =
 
-PHP 5 is with the curl extension is required.
+PHP 5 with the curl extension is required.
 
 = Why doesn't my map show any visitors? =
 
