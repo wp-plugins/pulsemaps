@@ -15,7 +15,7 @@ Show off your visitors on the world map. When people around the world visit your
 
 The PulseMaps plugin visualizes your site visitors' locations on the world map.  The plugin includes a map widget which you place on the pages you want to track.  The areas where you get the most visitors are shown with a lighter color.  The most recent visitors are show as flashing dots on the map.  The total number of visits is also shown.
 
-For a live demo, visit the [PulseMaps Blog](http://pulsemaps.com/blog/) and the [detail page for PulseMaps Blog visitors](http://app.pulsemaps.com/maps/526958181/).
+For a live demo, visit the [PulseMaps Blog](http://pulsemaps.com/blog/) and the [detail page for PulseMaps Blog visitors](http://pulsemaps.com/maps/526958181/).
 
 Simply drop the widget on your blog's sidebar. The map widget will work as a form of “social proof” : your visitors see that your blog is being read by people all over the world. This makes your blog instantly more trustworthy–who would trust a blog nobody reads? With this widget, you show readers that your site DOES get visitors. As an added bonus, the map just looks pretty dang cool!
 
@@ -54,7 +54,7 @@ The widget has been tested to work on all common browsers, such as Internet Expl
 
 = What PHP versions are supported? =
 
-PHP 5 is with the curl extension is required.
+PHP 5 with the curl extension is required.
 
 = Why doesn't my map show any visitors? =
 
