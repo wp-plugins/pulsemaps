@@ -153,13 +153,70 @@ function pulsemaps_activate_notice() {
 		echo '">widget admin page</a>.  Check also the <a href="';
 		echo get_option('siteurl') . '/wp-admin/options-general.php?page=pulsemaps';
         echo '">settings page</a>.</strong></p></div>';
-	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php' && !pulsemaps_tracking_active()) {
-	    echo '<div class="error"><p><strong>Drag a PulseMaps widget (one is enough) to a sidebar on the right to activate.</p></div>';
+	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php') {
+	    echo '<div id="pulsemaps_not_active" class="error" ';
+		if (pulsemaps_tracking_active()) {
+			echo 'style="display: none;"';
+		}
+		echo '><p><strong>Drag a PulseMaps widget (one is enough) to a sidebar on the right to activate.</strong></p></div>';
+	    echo '<div id="pulsemaps_activated" style="display: none;" class="updated"><p><strong>Great!  Now visit the <a href="';
+		echo get_option('siteurl'). '/wp-admin/options-general.php?page=pulsemaps';
+		echo '">settings page</a>.</strong></p></div>';
 	}
 }
-
 add_action('admin_notices', 'pulsemaps_activate_notice');
 
+function pulsemaps_widgets_css() {
+?>
+<style type="text/css" media="all">
+.pulsemaps-red-border {
+		border-color: #c00 !important;
+}
+.pulsemaps-red-bg {
+		background-color: #ffebe8 !important;
+}
+</style>
+<?php
+}
+
+add_action("admin_print_scripts-widgets.php", 'pulsemaps_widgets_css');
+
+function pulsemaps_widgets_script() {
+	?>
+<script type='text/javascript'>
+   var pulsemaps = pulsemaps || {};
+   pulsemaps.showRed = function() {
+	   jQuery('div.widget[id*=_pulsemapswidget] .widget-title').addClass('pulsemaps-red-bg');
+	   jQuery('div.widget[id*=_pulsemapswidget] .widget-top').addClass('pulsemaps-red-border');
+	   jQuery('div.widget[id*=_pulsemapswidget]').addClass('pulsemaps-red-border');
+   }
+   pulsemaps.hideRed = function() {
+	   jQuery('div.widget[id*=_pulsemapswidget] .widget-title').removeClass('pulsemaps-red-bg');
+	   jQuery('div.widget[id*=_pulsemapswidget] .widget-top').removeClass('pulsemaps-red-border');
+	   jQuery('div.widget[id*=_pulsemapswidget]').removeClass('pulsemaps-red-border');
+   }
+   pulsemaps.origSaveOrder = wpWidgets.saveOrder;
+   pulsemaps.saveOrder = function(sb) {
+	   if (jQuery('#widgets-right').find('div.widget[id*=_pulsemapswidget]').length) {
+		   jQuery('#pulsemaps_not_active').slideUp();
+		   jQuery('#pulsemaps_activated').slideDown();
+		   pulsemaps.hideRed();
+	   } else {
+		   jQuery('#pulsemaps_not_active').slideDown();
+		   jQuery('#pulsemaps_activated').slideUp();
+		   pulsemaps.showRed();
+	   }
+	   pulsemaps.origSaveOrder.call(wpWidgets, sb);
+   }
+   wpWidgets.saveOrder = pulsemaps.saveOrder;
+
+   if (jQuery('#widgets-right').find('div.widget[id*=_pulsemapswidget]').length == 0) {
+	   pulsemaps.showRed();
+   }
+</script>
+<?php
+}
+add_action("admin_footer-widgets.php", 'pulsemaps_widgets_script');
 
 function pulsemaps_plugin_actions($links, $file) {
 	if ($file == 'pulsemaps/pulsemaps.php') {

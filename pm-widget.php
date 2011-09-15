@@ -100,24 +100,3 @@ class PulseMapsWidget extends WP_Widget {
 }
 
 add_action('widgets_init', create_function('', 'return register_widget("PulseMapsWidget");'));
-
-
-function pulsemaps_widgets_style() {
-	if (!pulsemaps_tracking_active()) {
-		?>
-<style type="text/css">
-div.widget[id*=_pulsemapswidget] .widget-title {
-  background-color: #ffebe8;
-}
-#widget-list div.widget[id*=_pulsemapswidget] .widget-top {
-  border-color: #c00;
-}
-#wp_inactive_widgets div.widget[id*=_pulsemapswidget] {
-  border-color: #c00;
-}
-</style>
-<?php
-	}
-}
-
-add_action('admin_print_styles-widgets.php', 'pulsemaps_widgets_style');
