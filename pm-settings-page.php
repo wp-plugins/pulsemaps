@@ -58,7 +58,7 @@ function pulsemaps_admin_add_page() {
 	$page = add_options_page('PulseMaps Settings', 'PulseMaps', 'manage_options', 'pulsemaps', 'pulsemaps_options_page');
 	add_action("admin_print_styles-$page", 'pulsemaps_admin_styles');
 	add_action("admin_head-$page", 'pulsemaps_admin_scripts');
-	add_action('admin_footer', 'pulsemaps_admin_footer');
+	add_action("admin_footer-$page", 'pulsemaps_admin_footer');
 }
 
 function pulsemaps_options_page() {
