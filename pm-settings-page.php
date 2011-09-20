@@ -24,6 +24,12 @@ function pulsemaps_admin_styles() {
 }
 
 function pulsemaps_admin_scripts() {
+	$opts = get_option('pulsemaps_options', array());
+	if (!$opts['settings_visited']) {
+		$opts['settings_visited'] = true;
+		update_option('pulsemaps_options', $opts);
+	}
+
     $url_js = plugins_url('jscolor/jscolor.js', __FILE__);
     echo "<script type='text/javascript' src='$url_js'></script>\n";
     $url_js = plugins_url('settings.js', __FILE__);
@@ -312,6 +318,10 @@ function pulsemaps_options_validate($input) {
 		$options['track_all'] = true;
 	} else {
 		$options['track_all'] = false;
+	}
+
+	if (isset($input['settings_visited'])) {
+		$options['settings_visited'] = true;
 	}
 
 	return $options;

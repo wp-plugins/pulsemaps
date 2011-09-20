@@ -44,7 +44,7 @@ function pulsemaps_register() {
 }
 
 
-function pulsemaps_upgrade($opts) {
+function pulsemaps_upgrade($opts, $first) {
 	// Upgrade possible old widget style option.
 	$style = get_option('pulsemaps_widget', null);
 	if ($style !== null) {
@@ -82,6 +82,10 @@ function pulsemaps_upgrade($opts) {
 		$opts['widget_meta'] = true;
 	}
 
+	if (!isset($opts['settings_visited'])) {
+		$opts['settings_visited'] = !$first;
+	}
+
 	global $pulsemaps_version;
 	$opts['version'] = $pulsemaps_version;
 
@@ -95,7 +99,7 @@ function pulsemaps_upgrade_check() {
 
 	$opts = get_option('pulsemaps_options', array());
 	if (!isset($opts['version']) || $opts['version'] < $pulsemaps_version) {
-		pulsemaps_upgrade($opts);
+		pulsemaps_upgrade($opts, !isset($opts['version']));
 	}
 }
 
@@ -146,6 +150,11 @@ function pulsemaps_tracking_active() {
 }
 
 
+function pulsemaps_settings_visited() {
+	$opts = get_option('pulsemaps_options', array());
+	return $opts['settings_visited'];
+}
+
 function pulsemaps_activate_notice() {
 	if (substr($_SERVER["PHP_SELF"], -11) == 'plugins.php' && !pulsemaps_tracking_active()) {
 		echo '<div class="error"><p><strong>Activate PulseMaps visitor tracking on the <a href="';
@@ -158,10 +167,22 @@ function pulsemaps_activate_notice() {
 		if (pulsemaps_tracking_active()) {
 			echo 'style="display: none;"';
 		}
-		echo '><p><strong>Drag a PulseMaps widget (one is enough) to a sidebar on the right to activate.</strong></p></div>';
-	    echo '<div id="pulsemaps_activated" style="display: none;" class="updated"><p><strong>Great!  Now visit the <a href="';
+		echo '><p><strong>Drag the PulseMaps widget to a sidebar on the right to activate.</strong></p></div>';
+	    echo '<div ';
+		if (!pulsemaps_settings_visited()) {
+			echo 'id="pulsemaps_activated" ';
+		} else {
+			echo 'style="display: none;" ';
+		}
+		echo 'class="updated"><p><strong>Remember to visit your <a href="';
 		echo get_option('siteurl'). '/wp-admin/options-general.php?page=pulsemaps';
-		echo '">settings page</a>.</strong></p></div>';
+		echo '">PulseMaps settings page</a> to customize your widget.</strong></p></div>';
+	} else {
+		if (!pulsemaps_settings_visited()) {
+			echo '<div class="updated"><p><strong>Remember to visit your <a href="';
+			echo get_option('siteurl'). '/wp-admin/options-general.php?page=pulsemaps';
+			echo '">PulseMaps settings page</a> to customize your widget.</strong></p></div>';
+		}
 	}
 }
 add_action('admin_notices', 'pulsemaps_activate_notice');

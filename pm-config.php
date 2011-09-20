@@ -7,4 +7,4 @@ global $pulsemaps_site;
 $pulsemaps_site = 'http://pulsemaps.com';
 
 global $pulsemaps_version;
-$pulsemaps_version = 6;
+$pulsemaps_version = 7;
