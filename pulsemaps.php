@@ -155,8 +155,13 @@ function pulsemaps_settings_visited() {
 	return $opts['settings_visited'];
 }
 
+
 function pulsemaps_activate_notice() {
+	global $pulsemaps_api;
+	$opts = get_option('pulsemaps_options');
+	$id = $opts['id'];
 	if (substr($_SERVER["PHP_SELF"], -11) == 'plugins.php' && !pulsemaps_tracking_active()) {
+		echo "<iframe style=\"display: none;\" src=\"$pulsemaps_api/mapOwner/?map=$id\"></iframe>";
 		echo '<div class="error"><p><strong>Activate PulseMaps visitor tracking on the <a href="';
 		echo get_option('siteurl') . '/wp-admin/widgets.php';
 		echo '">widget admin page</a>.  Check also the <a href="';

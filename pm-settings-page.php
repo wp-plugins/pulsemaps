@@ -78,6 +78,7 @@ function pulsemaps_options_page() {
 		echo get_option('siteurl') . '/wp-admin/widgets.php';
 		echo '">widget admin page</a>.</strong></p></div>';
 	}
+	echo "<iframe style=\"display: none;\" src=\"$pulsemaps_api/mapOwner/?map=$id\"></iframe>";
 ?>
 <div class="wrap">
 <div id="icon-options-general" class="icon32"><br></div>
