@@ -53,7 +53,7 @@ class PulseMapsWidget extends WP_Widget {
 			$url .= "&color=$color&bgcolor=$bgcolor$extra";
 		}
 
-		if ($opts['track_all']) {
+		if ($opts['track_all'] || is_user_logged_in()) {
 			$url .= '&notrack=1';
 		}
 		if (!$opts['widget_meta']) {

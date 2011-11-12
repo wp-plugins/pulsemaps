@@ -263,7 +263,7 @@ add_filter('plugin_action_links', 'pulsemaps_plugin_actions', 10, 2);
 
 function pulsemaps_async_tracker() {
 	$opts = get_option('pulsemaps_options');
-	if ($opts['track_all']) {
+	if ($opts['track_all'] && !is_user_logged_in()) {
 		global $pulsemaps_api;
 		?>
 <script type="text/javascript">
