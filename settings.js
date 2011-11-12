@@ -25,7 +25,7 @@ pulsemaps.updatePreview = function(url) {
 	var type = jQuery('input:radio[name="pulsemaps_options[widget_type]"]:checked').val();
 	var width = jQuery('#widget-width').val();
 	var dots = jQuery("input[name='pulsemaps_options[widget_dots]']:checked").val();
-	var meta = jQuery("input[name='pulsemaps_options[widget_meta]']:checked").val();
+	var meta = jQuery("select[name='pulsemaps_options[widget_meta]']").val();
 
 	if (type == 'satellite') {
 		jQuery('.widget-plain').attr('disabled', 'disabled');
@@ -40,18 +40,16 @@ pulsemaps.updatePreview = function(url) {
 	// Load new preview.
 	var scr = document.createElement('script');
 	scr.type = 'text/javascript';
-	scr.src = url + '&type=' + type + '&width=' + width + '&color=' + color + '&bgcolor=' + bgcolor;
+	scr.src = url + '&type=' + type + '&width=' + width + '&color=' + color + '&bgcolor=' + bgcolor
+	    + '&meta=' + meta;
 	if (!dots) {
 		scr.src += '&nodots=1';
-	}
-	if (!meta) {
-		scr.src += '&nometa=1';
 	}
 	jQuery('#script-container').append(scr);
 }
 
 pulsemaps.setHooks = function(url) {
-	jQuery('input.widget-param').change(function() {
+	jQuery('input.widget-param, select.widget-param').change(function() {
 		window.onbeforeunload = function() { return "Your changes haven't been saved, are you sure you want to leave the page?"; };
 		pulsemaps.updatePreview(url);
 	});

@@ -38,7 +38,7 @@ function pulsemaps_admin_scripts() {
 	global $pulsemaps_api;
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
-	$widget_url = "$pulsemaps_api/widget.js?id=$id&notrack=1&target=widget-preview";
+	$widget_url = "$pulsemaps_api/widget.js?id=123456789&notrack=1&target=widget-preview";
     $url_load = plugins_url('pm-plan.php', __FILE__);
 ?>
 <script type='text/javascript'>
@@ -121,7 +121,7 @@ function pulsemaps_admin_init(){
 	add_settings_field('pulsemaps_widget_bgcolor', 'Background', 'pulsemaps_widget_bgcolor', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_open',    'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_dots','Real-time dots', 'pulsemaps_widget_dots', 'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_widget_meta',    'Show count', 'pulsemaps_widget_showmeta', 'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_meta',    'Text above small map', 'pulsemaps_widget_showmeta', 'pulsemaps', 'pulsemaps_options');
 	if ($options['plan'] != 'free') {
 		add_settings_field('pulsemaps_track_all',   'Track without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
 	}
@@ -182,8 +182,11 @@ function pulsemaps_widget_showmeta() {
 	$options = get_option('pulsemaps_options');
 	$meta = $options['widget_meta'];
 ?>
-	<input id="widget-new-window" class="widget-param" type="checkbox" name="pulsemaps_options[widget_meta]" value="1" <?php checked(1 == $meta); ?> />
-	<label for="widget-new-window">Show visit count and date.</label>
+    <select id="widget-meta" class="widget-param" name="pulsemaps_options[widget_meta]">
+      <option value="2" <?php selected($meta == '2'); ?>>Visitor count and start date</option>
+      <option value="1" <?php selected($meta == '1'); ?>>Visitor count only</option>
+      <option value="0" <?php selected($meta == '0'); ?>>No text</option>
+    </select>
 <?php
 }
 
@@ -304,9 +307,10 @@ function pulsemaps_options_validate($input) {
 	}
 
 	if (isset($input['widget_meta'])) {
-		$options['widget_meta'] = true;
-	} else {
-		$options['widget_meta'] = false;
+		$widget_meta = trim($input['widget_meta']);
+		if (in_array($widget_meta, array('0', '1', '2'))) {
+			$options['widget_meta'] = $widget_meta;
+		}
 	}
 
 	if (isset($input['widget_dots'])) {

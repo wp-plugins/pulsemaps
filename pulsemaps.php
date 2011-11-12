@@ -79,7 +79,13 @@ function pulsemaps_upgrade($opts, $first) {
 	}
 
 	if (!isset($opts['widget_meta'])) {
-		$opts['widget_meta'] = true;
+		$opts['widget_meta'] = '2';
+	} else if (is_bool($opts['widget_meta'])) {
+		if ($opts['widget_meta']) {
+			$opts['widget_meta'] = '2';
+		} else {
+			$opts['widget_meta'] = '0';
+		}
 	}
 
 	if (!isset($opts['settings_visited'])) {
