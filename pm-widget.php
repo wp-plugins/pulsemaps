@@ -38,11 +38,13 @@ class PulseMapsWidget extends WP_Widget {
 		$opts = get_option('pulsemaps_options');
 		$id = $opts['id'];
 		$width = $opts['widget_width'];
+		/*
 		echo "<a style=\"text-decoration: none;\" ";
 		if ($opts['widget_new_window']) {
 			echo "target=\"pulsemaps\" ";
 		}
 		echo "href=\"$pulsemaps_site/maps/$id/\" title=\"Click for more details!  Visitor map widget by PulseMaps.com\">";
+		*/
 
 		$url = "$pulsemaps_api/widget.js?id=$id&width=$width";
 		if ($opts['widget_type'] == 'satellite') {
@@ -65,7 +67,6 @@ class PulseMapsWidget extends WP_Widget {
 
 ?>
 <div id="pulsemaps_widget"></div>
-</a>
 <script type="text/javascript">
 	(function() {
      var pm=document.createElement('script');
