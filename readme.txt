@@ -7,7 +7,7 @@ Donate link: http://pulsemaps.com/pricing/
 Tags: visitor map, statistics, heat map, traffic counter, traffic widget, visitors counter, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
 Requires at least: 2.9
 Tested up to: 3.2.1
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 
 Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
@@ -67,6 +67,10 @@ Tracking visits is not an exact science.  Many hit counters will increase the co
 PulseMaps keeps track of visits and page views.  A page view is recorded when a page is viewed on a browser.  Page views from the same user are grouped into visits.  A pause of 30 minutes or more between page views causes a new visit to be recorded.  So for example, if a user visits your site and views 10 pages within 5 minutes, the number on the widget is increased by only one.  If the same user comes back and views a couple more pages after an hour, a second visit is recorded.  Click through to the map details page to see the number of page views.
 
 == Changelog ==
+
+= 1.4.5 =
+
+* Fix widget text settings to actually work.
 
 = 1.4.4 =
 
