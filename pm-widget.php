@@ -1,6 +1,6 @@
 <?php
 
-/*  Copyright 2011 Aito Software Inc. (email : contact@aitosoftware.com)
+/*  Copyright 2011-2012 Aito Software Inc. (email : contact@aitosoftware.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -38,13 +38,6 @@ class PulseMapsWidget extends WP_Widget {
 		$opts = get_option('pulsemaps_options');
 		$id = $opts['id'];
 		$width = $opts['widget_width'];
-		/*
-		echo "<a style=\"text-decoration: none;\" ";
-		if ($opts['widget_new_window']) {
-			echo "target=\"pulsemaps\" ";
-		}
-		echo "href=\"$pulsemaps_site/maps/$id/\" title=\"Click for more details!  Visitor map widget by PulseMaps.com\">";
-		*/
 
 		$url = "$pulsemaps_api/widget.js?id=$id&width=$width";
 		if ($opts['widget_type'] == 'satellite') {
@@ -62,6 +55,10 @@ class PulseMapsWidget extends WP_Widget {
 
 		if (!$opts['widget_dots']) {
 			$url .= '&nodots=1';
+		}
+
+		if ($opts['widget_new_window']) {
+			$url .= '&wnd=1';
 		}
 
 ?>
