@@ -1,0 +1,27 @@
+<html>
+<!--
+     Cross-domain iframe code from
+     http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content
+-->
+<body onload="sendToParent()">
+<script>
+	function sendToParent() {
+		var height = getParam('height');
+		var active = getParam('active');
+		var reload = getParam('reload');
+		parent.parent.pulsemaps_handler(height, active, reload);
+	}
+
+	function getParam(name) {
+		name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+		var regexS = "[\\?&]" + name + "=([^&#]*)";
+		var regex = new RegExp(regexS);
+		var results = regex.exec(window.location.href);
+		if (results == null)
+			return "";
+		else
+			return results[1];
+	}
+</script>
+</body>
+</html>

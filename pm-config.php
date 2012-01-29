@@ -1,13 +1,10 @@
 <?php
 
-global $pulsemaps_api;
-$pulsemaps_api = 'http://api.pulsemaps.com';
-
-global $pulsemaps_site;
-$pulsemaps_site = 'http://pulsemaps.com';
+global $pulsemaps_url;
+$pulsemaps_url = 'https://pulsemaps.com';
 
 global $pulsemaps_version;
-$pulsemaps_version = 8;
+$pulsemaps_version = 9;
 
 $local_config = dirname(__FILE__) . '/pm-config-local.php';
 if (file_exists($local_config)) {

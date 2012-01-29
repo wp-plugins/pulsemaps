@@ -25,8 +25,7 @@ class PulseMapsWidget extends WP_Widget {
 
     function widget($args, $instance) {
 		global $wpdb;
-		global $pulsemaps_api;
-		global $pulsemaps_site;
+		global $pulsemaps_url;
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
 		echo $before_widget;
@@ -39,7 +38,7 @@ class PulseMapsWidget extends WP_Widget {
 		$id = $opts['id'];
 		$width = $opts['widget_width'];
 
-		$url = "$pulsemaps_api/widget.js?id=$id&width=$width";
+		$url = "$pulsemaps_url/widget.js?id=$id&width=$width";
 		if ($opts['widget_type'] == 'satellite') {
 			$url .= "&type=satellite";
 		} else {
