@@ -1,6 +1,6 @@
 <?php
 
-/*  Copyright 2011 Aito Software Inc. (email : contact@aitosoftware.com)
+/*  Copyright 2011-2012 Aito Software Inc. (email : contact@aitosoftware.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -35,11 +35,11 @@ function pulsemaps_admin_scripts() {
     $url_js = plugins_url('settings.js', __FILE__);
     echo "<script type='text/javascript' src='$url_js'></script>\n";
 
-	global $pulsemaps_api;
+	global $pulsemaps_url;
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
-	$widget_url = "$pulsemaps_api/widget.js?id=123456789&notrack=1&target=widget-preview";
-    $url_load = plugins_url('pm-plan.php', __FILE__);
+	$widget_url = "$pulsemaps_url/widget.js?id=123456789&notrack=1&target=widget-preview";
+    $url_load = plugins_url('pm-proxy.php', __FILE__);
 ?>
 <script type='text/javascript'>
   function updatePreview() {
@@ -47,7 +47,12 @@ function pulsemaps_admin_scripts() {
   }
   jQuery(document).ready(function() {
 	pulsemaps.setHooks('<?php echo $widget_url; ?>');
-	jQuery("#pulsemaps_plan_load").load("<?php echo $url_load; ?>", {key: "<?php echo $options['key']; ?>"});
+	jQuery("#pulsemaps_plan_load").load("<?php echo $url_load; ?>",
+										{key: "<?php echo $options['key']; ?>",
+										 version: "<?php echo pulsemaps_plugin_version(); ?>",
+										 svn_id:  "$Id: $",
+										 wp_version: "<?php global $wp_version; echo $wp_version; ?>",
+										 php_version: "<?php echo phpversion(); ?>"});
   });
 </script>
 <?php
@@ -68,31 +73,48 @@ function pulsemaps_admin_add_page() {
 }
 
 function pulsemaps_options_page() {
+	global $pulsemaps_url;
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
-	$style = get_option('pulsemaps_widget', 'default');
-	global $pulsemaps_api;
     $siteurl = get_option('siteurl');
-	if (!pulsemaps_tracking_active()) {
-		echo '<div class="error"><p><strong>Visitor tracking is inactive. Drag the PulseMaps widget on a sidebar on the <a href="';
-		echo get_option('siteurl') . '/wp-admin/widgets.php';
-		echo '">widget admin page</a>.</strong></p></div>';
-	}
-	echo "<iframe style=\"display: none;\" src=\"$pulsemaps_api/mapOwner/?map=$id\"></iframe>";
 ?>
 <div class="wrap">
 <div id="icon-options-general" class="icon32"><br></div>
 <h2>PulseMaps Visitor Map</h2>
-<div id="pulsemaps_plan">
 <div id="pulsemaps_descr">
-<div id="pulsemaps_plan_load">
+<div id="pulsemaps_plan_load" <?php if (!$opts['activated']) { echo 'style="display: none;"'; } ?>>
 <img src="<?php echo $siteurl; ?>/wp-admin/images/loading.gif" alt="loading...">
 </div>
 </div>
-<div id="pulsemaps_map"></div>
-</div>
-<script type="text/javascript" id="pulsemaps_<?php echo $id; ?>" src="<?php echo $pulsemaps_api; ?>/map.js?id=<?php echo $id; ?>&target=pulsemaps_map"></script>
-<div id="pulsemaps_settings">
+<form style="display: none;" id="pulsemaps_activate" action="options.php" method="post">
+<?php settings_fields('pulsemaps_options'); ?>
+<input type="hidden" name="pulsemaps_options[activated]" value="1">
+<input type="hidden" name="pulsemaps_options[frameheight]" value="<?php echo $opts['frameheight']; ?>">
+</form>
+<script>
+function pulsemaps_handler(height, active, reload)
+{
+	document.getElementById('pulsemaps_iframe').height = parseInt(height);
+	if (active != 0) {
+		jQuery('#pulsemaps_settings').show();
+		jQuery("input[name='pulsemaps_options[frameheight]']").val(height);
+		jQuery.post('options.php', jQuery('#pulsemaps_activate').serialize(),
+					function() { if (reload) { top.location.reload(true); } });
+    }
+}
+</script>
+<?php if (!$opts['activated']) { ?>
+<iframe src="<?php echo "$pulsemaps_url/maps/$id/wp-info.html?settings_url=";
+                   echo urlencode(pulsemaps_settings_url());
+                   echo "&plugin_url=" . urlencode(plugins_url('', __FILE__));
+                   echo "&admin_url=" . urlencode(pulsemaps_admin_url()); ?>"
+		id="pulsemaps_iframe"
+		style="width: 100%; overflow-y: hidden;" scrolling="no"></iframe>
+<?php
+	}
+	$style = get_option('pulsemaps_widget', 'default');
+?>
+	<div id="pulsemaps_settings" <?php if (!$opts['activated']) { echo 'style="display: none;"'; } ?>>
 <form action="options.php" method="post">
 	 <?php settings_fields('pulsemaps_options'); ?>
 	 <?php do_settings_sections('pulsemaps'); ?>
@@ -120,10 +142,10 @@ function pulsemaps_admin_init(){
 	add_settings_field('pulsemaps_widget_color',   'Color', 'pulsemaps_widget_color', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_bgcolor', 'Background', 'pulsemaps_widget_bgcolor', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_open',    'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
-	add_settings_field('pulsemaps_widget_dots','Real-time dots', 'pulsemaps_widget_dots', 'pulsemaps', 'pulsemaps_options');
+	add_settings_field('pulsemaps_widget_dots',    'Real-time dots', 'pulsemaps_widget_dots', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_meta',    'Text above small map', 'pulsemaps_widget_showmeta', 'pulsemaps', 'pulsemaps_options');
 	if ($options['plan'] != 'free') {
-		add_settings_field('pulsemaps_track_all',   'Track without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
+		add_settings_field('pulsemaps_track_all',  'Track without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
 	}
 }
 
@@ -275,6 +297,11 @@ function pulsemaps_validate_color(&$options, $input, $field) {
 	}
 }
 
+function pulsemaps_validate_bool(&$options, $input, $field) {
+	if (isset($input[$field])) {
+		$options[$field] = (bool)$input[$field];
+	}
+}
 
 function pulsemaps_options_validate($input) {
 	$options = get_option('pulsemaps_options', array());
@@ -285,6 +312,11 @@ function pulsemaps_options_validate($input) {
 	pulsemaps_validate_color($options, $input, 'widget_bgcolor');
 	pulsemaps_validate_color($options, $input, 'custom_color');
 	pulsemaps_validate_color($options, $input, 'custom_bgcolor');
+	pulsemaps_validate_bool($options, $input, 'widget_dots');
+	pulsemaps_validate_bool($options, $input, 'track_all');
+	pulsemaps_validate_bool($options, $input, 'widget_new_window');
+	pulsemaps_validate_bool($options, $input, 'activated');
+	pulsemaps_validate_bool($options, $input, 'congrats');
 
 	if (isset($input['widget_type'])) {
 		$widget_type = trim($input['widget_type']);
@@ -300,33 +332,11 @@ function pulsemaps_options_validate($input) {
 		}
 	}
 
-	if (isset($input['widget_new_window'])) {
-		$options['widget_new_window'] = true;
-	} else {
-		$options['widget_new_window'] = false;
-	}
-
 	if (isset($input['widget_meta'])) {
 		$widget_meta = trim($input['widget_meta']);
 		if (in_array($widget_meta, array('0', '1', '2'))) {
 			$options['widget_meta'] = $widget_meta;
 		}
-	}
-
-	if (isset($input['widget_dots'])) {
-		$options['widget_dots'] = true;
-	} else {
-		$options['widget_dots'] = false;
-	}
-
-	if (isset($input['track_all'])) {
-		$options['track_all'] = true;
-	} else {
-		$options['track_all'] = false;
-	}
-
-	if (isset($input['settings_visited'])) {
-		$options['settings_visited'] = true;
 	}
 
 	return $options;

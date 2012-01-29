@@ -3,12 +3,12 @@
 Plugin Name: PulseMaps
 Plugin URI: http://pulsemaps.com/wordpress/
 Description: Show off your visitors on the world map.  When people around the world visit your blog, the corresponding areas on the heat map widget light up!
-Version: 1.4.6
+Version: 1.5
 Author: Aito Software Inc.
 License: GPLv2 or later
 */
 
-/*  Copyright 2011-2012 Aito Software Inc. (email : contact@aitosoftware.com)
+/*  Copyright 2011, 2012 Aito Software Inc. (email : contact@aitosoftware.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -29,8 +29,8 @@ require_once('pm-widget.php');
 require_once('pm-settings-page.php');
 
 function pulsemaps_register() {
-	global $pulsemaps_api;
-	$c = curl_init($pulsemaps_api . '/register');
+	global $pulsemaps_url;
+	$c = curl_init($pulsemaps_url . '/register');
 	$data = array('name' => get_option('blogname'),
 				  'email' => get_option('admin_email'),
 				  'url' => get_option('home'));
@@ -88,8 +88,12 @@ function pulsemaps_upgrade($opts, $first) {
 		}
 	}
 
-	if (!isset($opts['settings_visited'])) {
-		$opts['settings_visited'] = !$first;
+	if (!isset($opts['congrats'])) {
+		$opts['congrats'] = false;
+	}
+
+	if (!isset($opts['activated'])) {
+		$opts['activated'] = true;
 	}
 
 	global $pulsemaps_version;
@@ -114,7 +118,7 @@ register_activation_hook(__FILE__, 'pulsemaps_install');
 function pulsemaps_install() {
 	$opts = get_option('pulsemaps_options', array());
 
-	if (!isset($opts['key']) || !isset($opts['id'])) {
+	if (!pulsemaps_registered()) {
 		$ret = pulsemaps_register();
 		if ($ret['status'] == 'ok') {
 			$opts['key'] = $ret['key'];
@@ -142,6 +146,12 @@ function pulsemaps_install() {
 	if (!isset($opts['widget_type'])) {
 		$opts['widget_type'] = 'plain';
 	}
+	if (!isset($opts['congrats'])) {
+		$opts['congrats'] = false;
+	}
+	if (!isset($opts['activated'])) {
+		$opts['activated'] = false;
+	}
 
 	update_option('pulsemaps_options', $opts);
 
@@ -155,23 +165,42 @@ function pulsemaps_tracking_active() {
 	return $opts['track_all'];
 }
 
-
-function pulsemaps_settings_visited() {
+function pulsemaps_registered() {
 	$opts = get_option('pulsemaps_options', array());
-	return $opts['settings_visited'];
+	return isset($opts['key']) && isset($opts['id']);
 }
 
+function pulsemaps_activated() {
+	$opts = get_option('pulsemaps_options', array());
+	return $opts['activated'];
+}
+
+function pulsemaps_plugin_version() {
+	$plugin_data = get_plugin_data(__FILE__);
+	$plugin_version = $plugin_data['Version'];
+	return $plugin_version;
+}
+
+function pulsemaps_admin_url() {
+	if (function_exists('admin_url')) {
+		return admin_url();
+	} else {
+		return get_option('siteurl') . '/wp-admin/';
+	}
+}
+
+function pulsemaps_settings_url() {
+	return pulsemaps_admin_url() . 'options-general.php?page=pulsemaps';
+}
 
 function pulsemaps_activate_notice() {
-	global $pulsemaps_api;
+	global $pulsemaps_url;
 	$opts = get_option('pulsemaps_options');
 	$id = $opts['id'];
-	if (substr($_SERVER["PHP_SELF"], -11) == 'plugins.php' && !pulsemaps_tracking_active()) {
-		echo "<iframe style=\"display: none;\" src=\"$pulsemaps_api/mapOwner/?map=$id\"></iframe>";
-		echo '<div class="error"><p><strong>Activate PulseMaps visitor tracking on the <a href="';
-		echo get_option('siteurl') . '/wp-admin/widgets.php';
-		echo '">widget admin page</a>.  Check also the <a href="';
-		echo get_option('siteurl') . '/wp-admin/options-general.php?page=pulsemaps';
+	if (!pulsemaps_activated() && substr($_SERVER["PHP_SELF"], -11) != 'general.php'
+		&& $_GET["page"] != "pulsemaps") {
+		echo '<div class="error"><p><strong>Activate the PulseMaps service on the <a href="';
+		echo pulsemaps_settings_url();
         echo '">settings page</a>.</strong></p></div>';
 	} else if (substr($_SERVER["PHP_SELF"], -11) == 'widgets.php') {
 	    echo '<div id="pulsemaps_not_active" class="error" ';
@@ -179,21 +208,18 @@ function pulsemaps_activate_notice() {
 			echo 'style="display: none;"';
 		}
 		echo '><p><strong>Drag the PulseMaps widget to a sidebar on the right to activate.</strong></p></div>';
-	    echo '<div ';
-		if (!pulsemaps_settings_visited()) {
-			echo 'id="pulsemaps_activated" ';
-		} else {
-			echo 'style="display: none;" ';
-		}
-		echo 'class="updated"><p><strong>Remember to visit your <a href="';
-		echo get_option('siteurl'). '/wp-admin/options-general.php?page=pulsemaps';
-		echo '">PulseMaps settings page</a> to customize your widget.</strong></p></div>';
-	} else {
-		if (!pulsemaps_settings_visited()) {
-			echo '<div class="updated"><p><strong>Remember to visit your <a href="';
+		if (!$opts['congrats']) {
+			$opts['congrats'] = true;
+			update_option('pulsemaps_options', $opts);
+			echo '<div id="pulsemaps_activated" style="display: none;" ';
+			echo 'class="updated"><p><strong>All done! You can always visit the <a href="';
 			echo get_option('siteurl'). '/wp-admin/options-general.php?page=pulsemaps';
 			echo '">PulseMaps settings page</a> to customize your widget.</strong></p></div>';
 		}
+	}  else if (!pulsemaps_tracking_active() && pulsemaps_activated()) {
+		echo '<div class="error"><p><strong>Enable the PulseMaps widget on the <a href="';
+		echo get_option('siteurl') . '/wp-admin/widgets.php';
+		echo '">widget admin page</a> to start mapping visitors.</strong></p></div>';
 	}
 }
 add_action('admin_notices', 'pulsemaps_activate_notice');
@@ -264,12 +290,12 @@ add_filter('plugin_action_links', 'pulsemaps_plugin_actions', 10, 2);
 function pulsemaps_async_tracker() {
 	$opts = get_option('pulsemaps_options');
 	if ($opts['track_all'] && !is_user_logged_in()) {
-		global $pulsemaps_api;
+		global $pulsemaps_url;
 		?>
 <script type="text/javascript">
 (function() {
    var pm = document.createElement('script'); pm.type = 'text/javascript'; pm.async = true;
-   pm.src = "<?php echo $pulsemaps_api .'/tracker.js?id='.$opts['id']; ?>";
+   pm.src = "<?php echo $pulsemaps_url .'/tracker.js?id='.$opts['id']; ?>";
    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pm, s);
 })();
 </script>
@@ -278,3 +304,24 @@ function pulsemaps_async_tracker() {
 }
 
 add_action('wp_head', 'pulsemaps_async_tracker');
+
+
+function pulsemaps_bigmap($atts) {
+	$opts = get_option('pulsemaps_options', array());
+	$id = $opts['id'];
+	global $pulsemaps_url;
+	$url = $pulsemaps_url . '/map.js?id=' . $id . '&target=pulsemaps_map';
+	return "<div id=\"pulsemaps_map\" style=\"width: 512; height: 320px\"></div>\n"
+		. "<script type=\"text/javascript\">\n"
+		. "(function() {\n"
+		. "  var pm=document.createElement(\"script\");\n"
+		. "  pm.type = 'text/javascript';\n"
+		. "  pm.async = true;\n"
+		. "  pm.src = '" . $url . "';\n"
+		. "  var s = document.getElementById('pulsemaps_map');\n"
+		. "  s.parentNode.appendChild(pm);\n"
+		. "})();\n"
+		. "</script>\n";
+}
+
+add_shortcode('pulsemaps', 'pulsemaps_bigmap');

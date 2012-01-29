@@ -1,16 +1,5 @@
-#pulsemaps_plan {
-	width: 1000px;
-}
-
-#pulsemaps_map {
-	width: 512px;
-	height: 280px;
-	float: right;
-}
-
 #pulsemaps_descr {
-	width: 450px;
-	float: left;
+	margin-bottom: 20px;
 }
 
 #pulsemaps_settings {
