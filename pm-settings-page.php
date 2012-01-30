@@ -109,6 +109,7 @@ function pulsemaps_handler(height, active, reload)
                    echo "&plugin_url=" . urlencode(plugins_url('', __FILE__));
                    echo "&admin_url=" . urlencode(pulsemaps_admin_url()); ?>"
 		id="pulsemaps_iframe"
+	    frameborder="0"
 		style="width: 100%; overflow-y: hidden;" scrolling="no"></iframe>
 <?php
 	}
