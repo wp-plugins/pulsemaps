@@ -89,7 +89,6 @@ function pulsemaps_options_page() {
 <form style="display: none;" id="pulsemaps_activate" action="options.php" method="post">
 <?php settings_fields('pulsemaps_options'); ?>
 <input type="hidden" name="pulsemaps_options[activated]" value="1">
-<input type="hidden" name="pulsemaps_options[frameheight]" value="<?php echo $opts['frameheight']; ?>">
 </form>
 <script>
 function pulsemaps_handler(height, active, reload)
@@ -97,7 +96,6 @@ function pulsemaps_handler(height, active, reload)
 	document.getElementById('pulsemaps_iframe').height = parseInt(height);
 	if (active != 0) {
 		jQuery('#pulsemaps_settings').show();
-		jQuery("input[name='pulsemaps_options[frameheight]']").val(height);
 		jQuery.post('options.php', jQuery('#pulsemaps_activate').serialize(),
 					function() { if (reload) { top.location.reload(true); } });
     }
