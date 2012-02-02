@@ -28,8 +28,9 @@ $header_size = $info["header_size"];
 $headers = substr($data, 0, $header_size);
 foreach (explode("\n", $headers) as $header) {
 	$header = rtrim($header);
-	if ($header) {
+	if ($header && strpos($header, 'Transfer-Encoding') === false) {
 		header($header);
 	}
 }
+
 echo substr($data, $header_size);
