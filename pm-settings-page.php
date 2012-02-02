@@ -39,20 +39,33 @@ function pulsemaps_admin_scripts() {
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
 	$widget_url = "$pulsemaps_url/widget.js?id=123456789&notrack=1&target=widget-preview";
-    $url_load = plugins_url('pm-proxy.php', __FILE__);
+    $proxy_url = plugins_url('pm-proxy.php', __FILE__);
+    $siteurl = get_option('siteurl');
 ?>
 <script type='text/javascript'>
   function updatePreview() {
     pulsemaps.updatePreview('<?php echo $widget_url; ?>');
   }
-  jQuery(document).ready(function() {
-	pulsemaps.setHooks('<?php echo $widget_url; ?>');
-	jQuery("#pulsemaps_plan_load").load("<?php echo $url_load; ?>",
-										{key: "<?php echo $options['key']; ?>",
+  function showMessage(msg) {
+	  jQuery("#pulsemaps_message").html("<p><strong>" + msg + "</strong></p>").show();
+  }
+  function updateInfo() {
+	jQuery("#pulsemaps_plan_load").html('<img src="<?php echo $siteurl; ?>/wp-admin/images/loading.gif" alt="loading...">');
+	jQuery("#pulsemaps_plan_load").load("<?php echo $proxy_url; ?>",
+										{path: "/maps/<?php echo $options['id']; ?>/wp-info.html",
+										 url: "<?php echo $proxy_url; ?>",
+										 site_url: "<?php echo $siteurl; ?>",
+										 id: "<?php echo $options['id']; ?>",
+										 key: "<?php echo $options['key']; ?>",
 										 version: "<?php echo pulsemaps_plugin_version(); ?>",
+										 return_to: "<?php echo pulsemaps_settings_url(); ?>",
 										 svn_id:  "$Id: $",
 										 wp_version: "<?php global $wp_version; echo $wp_version; ?>",
 										 php_version: "<?php echo phpversion(); ?>"});
+  }
+  jQuery(document).ready(function() {
+	pulsemaps.setHooks('<?php echo $widget_url; ?>');
+	updateInfo();
   });
 </script>
 <?php
@@ -76,14 +89,13 @@ function pulsemaps_options_page() {
 	global $pulsemaps_url;
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
-    $siteurl = get_option('siteurl');
 ?>
+<div id="pulsemaps_message" style="display: none;" class="updated"></div>
 <div class="wrap">
 <div id="icon-options-general" class="icon32"><br></div>
 <h2>PulseMaps Visitor Map</h2>
 <div id="pulsemaps_descr">
-<div id="pulsemaps_plan_load" <?php if (!$opts['activated']) { echo 'style="display: none;"'; } ?>>
-<img src="<?php echo $siteurl; ?>/wp-admin/images/loading.gif" alt="loading...">
+<div id="pulsemaps_plan_load">
 </div>
 </div>
 <form style="display: none;" id="pulsemaps_activate" action="options.php" method="post">
@@ -91,29 +103,22 @@ function pulsemaps_options_page() {
 <input type="hidden" name="pulsemaps_options[activated]" value="1">
 </form>
 <script>
-function pulsemaps_handler(height, active, reload)
+function pulsemaps_activate(data)
 {
-	document.getElementById('pulsemaps_iframe').height = parseInt(height);
-	if (active != 0) {
-		jQuery('#pulsemaps_settings').show();
-		jQuery.post('options.php', jQuery('#pulsemaps_activate').serialize(),
-					function() { if (reload) { top.location.reload(true); } });
-    }
+	jQuery('#pulsemaps_settings').show();
+	<?php if (!$opts['activated']) { ?>
+	jQuery.post('options.php', jQuery('#pulsemaps_activate').serialize());
+	jQuery('#pulsemaps_widget_msg').show();
+	<?php } ?>
+	if (data.reload) {
+	  updateInfo();
+	}
+	if (data.message) {
+	  showMessage(data.message);
+	}
 }
 </script>
-<?php if (!$opts['activated']) { ?>
-<iframe src="<?php echo "$pulsemaps_url/maps/$id/wp-info.html?settings_url=";
-                   echo urlencode(pulsemaps_settings_url());
-                   echo "&plugin_url=" . urlencode(plugins_url('', __FILE__));
-                   echo "&admin_url=" . urlencode(pulsemaps_admin_url()); ?>"
-		id="pulsemaps_iframe"
-	    frameborder="0"
-		style="width: 100%; overflow-y: hidden;" scrolling="no"></iframe>
-<?php
-	}
-	$style = get_option('pulsemaps_widget', 'default');
-?>
-	<div id="pulsemaps_settings" <?php if (!$opts['activated']) { echo 'style="display: none;"'; } ?>>
+<div id="pulsemaps_settings" <?php if (!$opts['activated']) { echo 'style="display: none;"'; } ?>>
 <form action="options.php" method="post">
 	 <?php settings_fields('pulsemaps_options'); ?>
 	 <?php do_settings_sections('pulsemaps'); ?>

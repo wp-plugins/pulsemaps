@@ -17,12 +17,19 @@
 */
 
 require_once('pm-config.php');
-$c = curl_init($pulsemaps_url . '/mapInfo/wp/');
+$c = curl_init($pulsemaps_url . $_POST['path']);
 curl_setopt($c, CURLOPT_POSTFIELDS, $_POST);
-curl_exec($c);
-$code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+curl_setopt($c, CURLOPT_HEADER, true);
+curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+$data = curl_exec($c);
+$info = curl_getinfo($c);
 curl_close($c);
-if ($code != "200") {
-	echo "Could not retrieve info from PulseMaps server. Please try again later.";
-	die;
+$header_size = $info["header_size"];
+$headers = substr($data, 0, $header_size);
+foreach (explode("\n", $headers) as $header) {
+	$header = rtrim($header);
+	if ($header) {
+		header($header);
+	}
 }
+echo substr($data, $header_size);
