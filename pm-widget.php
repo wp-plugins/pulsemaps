@@ -74,6 +74,7 @@ class PulseMapsWidget extends WP_Widget {
 	})();
 </script>
 <?php
+	    echo $opts['after_text'];
 		echo $after_widget;
 	}
 

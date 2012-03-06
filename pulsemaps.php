@@ -3,7 +3,7 @@
 Plugin Name: PulseMaps
 Plugin URI: http://pulsemaps.com/wordpress/
 Description: Show off your visitors on the world map.  When people around the world visit your blog, the corresponding areas on the heat map widget light up!
-Version: 1.5.2
+Version: 1.5.3
 Author: Aito Software Inc.
 License: GPLv2 or later
 */
@@ -152,10 +152,41 @@ function pulsemaps_install() {
 	if (!isset($opts['activated'])) {
 		$opts['activated'] = false;
 	}
+	if (!isset($opts['after_text'])) {
+		$opts['after_text'] = '';
+	}
 
 	update_option('pulsemaps_options', $opts);
 
+	if (!wp_next_scheduled('pulsemaps_daily')) {
+		wp_schedule_event(time(), 'daily', 'pulsemaps_daily');
+	}
 }
+
+register_deactivation_hook(__FILE__, 'pulsemaps_uninstall');
+function pulsemaps_uninstall() {
+	wp_clear_scheduled_hook('pulsemaps_daily');
+}
+
+function pulsemaps_refresh() {
+	global $pulsemaps_url;
+	$opts = get_option('pulsemaps_options', array());
+	$c = curl_init($pulsemaps_url . '/refresh');
+	$data = array('key' => $opts['key'],
+				  'name' => get_option('blogname'),
+				  'url' => get_option('home'));
+	curl_setopt($c, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+	$ret = curl_exec($c);
+	$code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+	curl_close($c);
+	foreach (json_decode($ret, true) as $k => $v) {
+		$opts[$k] = $v;
+	}
+	update_option('pulsemaps_options', $opts);
+}
+add_action('pulsemaps_daily', 'pulsemaps_refresh');
+
 
 function pulsemaps_tracking_active() {
 	if (is_active_widget(false, false, 'pulsemapswidget', true)) {
