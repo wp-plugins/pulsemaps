@@ -46,7 +46,51 @@ pulsemaps.updatePreview = function(url) {
 		scr.src += '&nodots=1';
 	}
 	jQuery('#script-container').append(scr);
-}
+};
+
+pulsemaps.install = function(event) {
+	event.preventDefault();
+
+	var btn = jQuery('#pulsemaps_install_button');
+	var loader = jQuery('#pulsemaps_install_loading');
+	var msg = jQuery('#pulsemaps_install_error');
+
+	if (btn.hasClass('button-disabled')) {
+		return;
+	}
+
+	btn.addClass('button-disabled');
+	loader.show();
+	msg.hide();
+
+	var data = {'email': jQuery('#email').val(),
+				'password': jQuery('#password').val(),
+				'action': 'pulsemaps_register'};
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
+		data: data,
+		dataType: 'json',
+		success: function(data, status) {
+			if (data.status != 'ok') {
+				msg.html(data.errorMessage).show();
+				btn.removeClass('button-disabled');
+				loader.hide();
+			} else {
+				location.reload();
+			}
+		},
+		error: function(request, status, error) {
+			var html = 'An error occurred when connecting to your WordPress server.  Please try again later.<br/>';
+			html += 'If the problem persists, contact <a href="mailto:support@pulsemaps.com">support@pulsemaps.com</a> and include the following information:<br/><br/>';
+			html += 'Status: ' + status + '<br/>';
+			html += 'Error: ' + error + '<br/>';
+			msg.html(html).show();
+			btn.removeClass('button-disabled');
+			loader.hide();
+		}
+	});
+};
 
 pulsemaps.setHooks = function(url) {
 	jQuery('input.widget-param, select.widget-param').change(function() {
@@ -54,4 +98,31 @@ pulsemaps.setHooks = function(url) {
 		pulsemaps.updatePreview(url);
 	});
 	jQuery("form").submit(function() { window.onbeforeunload = null; });
-}
+};
+
+pulsemaps.loadInfo = function() {
+	var data = jQuery('#pulsemaps_data');
+	var admin_url = data.data('admin-url');
+	var proxy_url = data.data('proxy-url');
+	var id = data.data('id');
+	var key = data.data('key');
+	jQuery("#pulsemaps_plan_load").html('<img src="' + admin_url + '/images/loading.gif" alt="loading...">');
+	jQuery("#pulsemaps_plan_load").load(proxy_url,
+										{path: '/maps/' + id + '/wp-info.html',
+										 key: key});
+};
+
+
+jQuery(document).ready(function() {
+	var data = jQuery('#pulsemaps_data');
+	if (data.length) {
+		var url = data.data('url');
+		var id = data.data('id');
+		url += '/widget.js?id=' + id + '&notrack=1&target=widget-preview';
+		pulsemaps.setHooks(url);
+		pulsemaps.updatePreview(url);
+		pulsemaps.loadInfo();
+	} else {
+		jQuery('#pulsemaps_install_form').submit(pulsemaps.install);
+	}
+});

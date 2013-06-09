@@ -1,6 +1,6 @@
 <?php
 
-/*  Copyright 2011-2012 Aito Software Inc. (email : contact@aitosoftware.com)
+/*  Copyright 2011-2013 Aito Software Inc. (email : contact@aitosoftware.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -38,42 +38,11 @@ function pulsemaps_admin_scripts() {
 	global $pulsemaps_url;
 	$options = get_option('pulsemaps_options');
 	$id = $options['id'];
-	$widget_url = "$pulsemaps_url/widget.js?id=123456789&notrack=1&target=widget-preview";
-    $proxy_url = plugins_url('pm-proxy.php', __FILE__);
     $siteurl = get_option('siteurl');
-?>
-<script type='text/javascript'>
-  function updatePreview() {
-    pulsemaps.updatePreview('<?php echo $widget_url; ?>');
-  }
-  function showMessage(msg) {
-	  jQuery("#pulsemaps_message").html("<p><strong>" + msg + "</strong></p>").show();
-  }
-  function updateInfo() {
-	jQuery("#pulsemaps_plan_load").html('<img src="<?php echo $siteurl; ?>/wp-admin/images/loading.gif" alt="loading...">');
-	jQuery("#pulsemaps_plan_load").load("<?php echo $proxy_url; ?>",
-										{path: "/maps/<?php echo $options['id']; ?>/wp-info.html",
-										 url: "<?php echo $proxy_url; ?>",
-										 site_url: "<?php echo $siteurl; ?>",
-										 id: "<?php echo $options['id']; ?>",
-										 key: "<?php echo $options['key']; ?>",
-										 version: "<?php echo pulsemaps_plugin_version(); ?>",
-										 return_to: "<?php echo pulsemaps_settings_url(); ?>",
-										 svn_id:  "$Id: $",
-										 wp_version: "<?php global $wp_version; echo $wp_version; ?>",
-										 php_version: "<?php echo phpversion(); ?>"});
-  }
-  jQuery(document).ready(function() {
-	pulsemaps.setHooks('<?php echo $widget_url; ?>');
-	updateInfo();
-  });
-</script>
-<?php
 }
 
-
 function pulsemaps_admin_footer() {
-	echo "<div id=\"script-container\"><script type='text/javascript'>updatePreview();</script></div>\n";
+	echo "<div id=\"script-container\"></div>\n";
 }
 
 
@@ -85,40 +54,76 @@ function pulsemaps_admin_add_page() {
 	add_action("admin_footer-$page", 'pulsemaps_admin_footer');
 }
 
+
 function pulsemaps_options_page() {
+	if (!pulsemaps_registered()) {
+		pulsemaps_register_page();
+	} else {
+		pulsemaps_settings_page();
+	}
+}
+
+
+function pulsemaps_register_page() {
+	global $pulsemaps_url;
+	$tags = 'utm_source=wordpress&utm_medium=integration&utm_campaign=wp_plugin_' . pulsemaps_plugin_version();
+?>
+<h2>Install PulseMaps</h2>
+
+<h3>Sign in to your PulseMaps account to continue</h3>
+
+<form id="pulsemaps_install_form" method="post">
+	<table class="form-table">
+		<tr>
+			<th style="width: 100px;"><label for="email">Email</label></th>
+			<td>
+				<input tabindex="1" style="width: 200px;" id="email" name="email" size="32" type="text" class="regular-text" value="" />
+				<a href="<?php echo "$pulsemaps_url/?$tags"; ?>" target="_blank">(don't have a PulseMaps account yet?)</a>
+			</td>
+		</tr>
+		<tr>
+			<th style="width: 100px;"><label for="password">Password</label></th>
+			<td>
+				<input tabindex="1" style="width: 200px;" id="password" name="password" size="32" type="password" class="regular-text">
+				<a href="<?php echo "$pulsemaps_url/forgot/?$tags"; ?>" target="_blank">(forgot your password?)</a>
+			</td>
+		</tr>
+	</table>
+	<table class="form-table">
+		<tr>
+			<th>
+				<input tabindex="1" style="float: left; margin-right: 10px;" id="pulsemaps_install_button" type="submit" class="button button-primary button-large" value="Install »" />
+				<img id="pulsemaps_install_loading" style="padding-top: 8px; display: none;" src="<?php echo pulsemaps_admin_url(); ?>images/loading.gif" alt="loading...">
+			</th>
+			<td>
+				<div style="padding-top: 3px; color: #ff6060; font-size: 120%;" id="pulsemaps_install_error"></div>
+			</td>
+	</table>
+</form>
+<?php
+}
+
+function pulsemaps_settings_page() {
 	global $pulsemaps_url;
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
 ?>
+<div id="pulsemaps_data"
+     data-url="<?php echo $pulsemaps_url; ?>"
+     data-admin-url="<?php echo pulsemaps_admin_url(); ?>"
+     data-proxy-url="<?php echo plugins_url('pm-proxy.php', __FILE__); ?>"
+     data-id="<?php echo $opts['id']; ?>"
+     data-key="<?php echo $opts['key']; ?>"
+></div>
 <div id="pulsemaps_message" style="display: none;" class="updated"></div>
 <div class="wrap">
 <div id="icon-options-general" class="icon32"><br></div>
-<h2>PulseMaps Visitor Map</h2>
+<h2>PulseMaps Settings</h2>
 <div id="pulsemaps_descr">
 <div id="pulsemaps_plan_load">
 </div>
 </div>
-<form style="display: none;" id="pulsemaps_activate" action="options.php" method="post">
-<?php settings_fields('pulsemaps_options'); ?>
-<input type="hidden" name="pulsemaps_options[activated]" value="1">
-</form>
-<script>
-function pulsemaps_activate(data)
-{
-	jQuery('#pulsemaps_settings').show();
-	<?php if (!$opts['activated']) { ?>
-	jQuery.post('options.php', jQuery('#pulsemaps_activate').serialize());
-	jQuery('#pulsemaps_widget_msg').show();
-	<?php } ?>
-	if (data.reload) {
-	  updateInfo();
-	}
-	if (data.message) {
-	  showMessage(data.message);
-	}
-}
-</script>
-<div id="pulsemaps_settings" <?php if (!$opts['activated']) { echo 'style="display: none;"'; } ?>>
+<div id="pulsemaps_settings">
 <form action="options.php" method="post">
 	 <?php settings_fields('pulsemaps_options'); ?>
 	 <?php do_settings_sections('pulsemaps'); ?>
@@ -148,9 +153,6 @@ function pulsemaps_admin_init(){
 	add_settings_field('pulsemaps_widget_open',    'New Window', 'pulsemaps_widget_opennew',  'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_dots',    'Real-time dots', 'pulsemaps_widget_dots', 'pulsemaps', 'pulsemaps_options');
 	add_settings_field('pulsemaps_widget_meta',    'Text above small map', 'pulsemaps_widget_showmeta', 'pulsemaps', 'pulsemaps_options');
-	if ($options['plan'] != 'free') {
-		add_settings_field('pulsemaps_track_all',  'Track without widget', 'pulsemaps_track_all',  'pulsemaps', 'pulsemaps_options');
-	}
 }
 
 function pulsemaps_widget_section() {
@@ -216,14 +218,6 @@ function pulsemaps_widget_showmeta() {
 <?php
 }
 
-function pulsemaps_track_all() {
-	$options = get_option('pulsemaps_options');
-	$track_all = $options['track_all'];
-?>
-	<input id="track-all" class="widget-param" type="checkbox" name="pulsemaps_options[track_all]" value="1" <?php checked(1 == $track_all); ?> />
-	<label for="track-all">Track also pages without the widget.</label>
-<?php
-}
 
 function pulsemaps_widget_color() {
 	$options = get_option('pulsemaps_options');
@@ -317,7 +311,6 @@ function pulsemaps_options_validate($input) {
 	pulsemaps_validate_color($options, $input, 'custom_color');
 	pulsemaps_validate_color($options, $input, 'custom_bgcolor');
 	pulsemaps_validate_bool($options, $input, 'widget_dots');
-	pulsemaps_validate_bool($options, $input, 'track_all');
 	pulsemaps_validate_bool($options, $input, 'widget_new_window');
 	pulsemaps_validate_bool($options, $input, 'activated');
 	pulsemaps_validate_bool($options, $input, 'congrats');
