@@ -108,13 +108,15 @@ function pulsemaps_settings_page() {
 	$opts = get_option('pulsemaps_options', array());
 	$id = $opts['id'];
 ?>
-<div id="pulsemaps_data"
-     data-url="<?php echo $pulsemaps_url; ?>"
-     data-admin-url="<?php echo pulsemaps_admin_url(); ?>"
-     data-proxy-url="<?php echo plugins_url('pm-proxy.php', __FILE__); ?>"
-     data-id="<?php echo $opts['id']; ?>"
-     data-key="<?php echo $opts['key']; ?>"
-></div>
+<script type="text/javascript">
+    var pulsemaps_data = {
+     url: "<?php echo $pulsemaps_url; ?>",
+     adminUrl: "<?php echo pulsemaps_admin_url(); ?>",
+     proxyUrl: "<?php echo plugins_url('pm-proxy.php', __FILE__); ?>",
+     id: "<?php echo $opts['id']; ?>",
+     key :"<?php echo $opts['key']; ?>"
+    };
+</script>
 <div id="pulsemaps_message" style="display: none;" class="updated"></div>
 <div class="wrap">
 <div id="icon-options-general" class="icon32"><br></div>

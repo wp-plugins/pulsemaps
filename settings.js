@@ -101,11 +101,10 @@ pulsemaps.setHooks = function(url) {
 };
 
 pulsemaps.loadInfo = function() {
-	var data = jQuery('#pulsemaps_data');
-	var admin_url = data.data('admin-url');
-	var proxy_url = data.data('proxy-url');
-	var id = data.data('id');
-	var key = data.data('key');
+	var admin_url = pulsemaps_data.adminUrl;
+	var proxy_url = pulsemaps_data.proxyUrl;
+	var id = pulsemaps_data.id;
+	var key = pulsemaps_data.key;
 	jQuery("#pulsemaps_plan_load").html('<img src="' + admin_url + '/images/loading.gif" alt="loading...">');
 	jQuery("#pulsemaps_plan_load").load(proxy_url,
 										{path: '/maps/' + id + '/wp-info.html',
@@ -114,10 +113,9 @@ pulsemaps.loadInfo = function() {
 
 
 jQuery(document).ready(function() {
-	var data = jQuery('#pulsemaps_data');
-	if (data.length) {
-		var url = data.data('url');
-		var id = data.data('id');
+	if (pulsemaps_data ) {
+		var url = pulsemaps_data.url;
+		var id = pulsemaps_data.id;
 		url += '/widget.js?id=' + id + '&notrack=1&target=widget-preview';
 		pulsemaps.setHooks(url);
 		pulsemaps.updatePreview(url);
