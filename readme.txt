@@ -1,4 +1,4 @@
-=== PulseMaps Visitor Map Plugin ===
+=== PulseMaps Visitor World Map ===
 Contributors: aitosoftware
 Author: aitosoftware (Aito Software Inc.)
 Author URI: http://pulsemaps.com/
@@ -30,7 +30,6 @@ Features
  * Click on map to open a large map with more details and statistics
  * Works on all popular browsers
  * Lightweight plugin (does not need a lot of disk space)
- * Free (but paid plan available for extra features)
 
 == Installation ==
 
