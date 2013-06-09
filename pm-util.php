@@ -16,9 +16,27 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once('pm-config.php');
-require_once('pm-util.php');
+ini_set('track_errors', 1);
 
-$r = pulsemaps_post_request($pulsemaps_url . $_POST['path'],
-							array('key' => $_POST['key']));
-print $r;
+
+function pulsemaps_post_request($url, $data, $optional_headers = null) {
+	$params = array('http' => array('method' => 'POST',
+									'content' => http_build_query($data)));
+	if ($optional_headers !== null) {
+		$params['http']['header'] = $optional_headers;
+	}
+	$ctx = stream_context_create($params);
+	$fp = @fopen($url, 'rb', false, $ctx);
+	if (!$fp) {
+		throw new Exception("Cannot connect to $url: $php_errormsg");
+	}
+	$response = @stream_get_contents($fp);
+	if ($response === false) {
+		throw new Exception("Cannot read from $url: $php_errormsg");
+	}
+	return $response;
+}
+
+function pulsemaps_call_json($url, $data) {
+    return json_decode(pulsemaps_post_request($url, $data), true);
+}
