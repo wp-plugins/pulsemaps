@@ -1,15 +1,15 @@
-=== PulseMaps Visitor Map Plugin ===
+=== PulseMaps Visitor World Map ===
 Contributors: aitosoftware
 Author: aitosoftware (Aito Software Inc.)
 Author URI: http://pulsemaps.com/
 Plugin URI: http://pulsemaps.com/wordpress/
 Donate link: http://pulsemaps.com/pricing/
-Tags: visitor map, statistics, heat map, traffic counter, traffic widget, visitors counter, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
-Requires at least: 2.9
-Tested up to: 3.3.1
-Stable tag: 1.6
+Tags: visitor map, world map, heat map, traffic counter, traffic widget, visitors counter, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
+Requires at least: 3.0
+Tested up to: 3.5.1
+Stable tag: 1.7.2
 
-Show off your visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
+Show off your website visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
 == Description ==
 
@@ -30,13 +30,12 @@ Features
  * Click on map to open a large map with more details and statistics
  * Works on all popular browsers
  * Lightweight plugin (does not need a lot of disk space)
- * Free (but paid plan available for extra features)
 
 == Installation ==
 
 1. Upload the folder `pulsemaps` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Activate the PulseMaps widget through the 'Appearance' / 'Widgets' menu in Wordpress
+3. Register your site on the 'Settings' / 'PulseMaps' menu in WordPress
 
 == Screenshots ==
 
@@ -50,23 +49,27 @@ Features
 
 = What browsers does the widget support? =
 
-The widget has been tested to work on all common browsers, such as Internet Explorer, Firefox, Chrome, Safari, and Opera, as well as mobile Safari and the Android browser.
+The widget has been tested to work on all major browsers, such as Internet Explorer, Firefox, Chrome, Safari, and Opera, as well as mobile Safari and the Android browser.
 
 = What PHP versions are supported? =
 
-PHP 5 with the curl extension is required.
-
-= Why doesn't my map show any visitors? =
-
-Make sure the map widget is present and visible on all pages you want to track.  To track visits without the widget, upgrade to the VIP plan.
-
-= Why is the visit count different from other trackers? =
-
-Tracking visits is not an exact science.  Many hit counters will increase the counter for every time a page was requested from the web server.  For various reasons, this could lead to misleadingly high visit counts.  PulseMaps only tracks actual page views by actual browsers, almost always operated by an actual human.
-
-PulseMaps keeps track of visits and page views.  A page view is recorded when a page is viewed on a browser.  Page views from the same user are grouped into visits.  A pause of 30 minutes or more between page views causes a new visit to be recorded.  So for example, if a user visits your site and views 10 pages within 5 minutes, the number on the widget is increased by only one.  If the same user comes back and views a couple more pages after an hour, a second visit is recorded.  Click through to the map details page to see the number of page views.
+PHP 5 is required.
 
 == Changelog ==
+
+= 1.7.2 =
+
+* Bug fixes.
+
+= 1.7.1 =
+
+* Not released.
+
+= 1.7 =
+
+* Bug fixes to registration process.
+* Widget no longer required on page to track page views.
+* The curl PHP extension is no longer required.
 
 = 1.6 =
 

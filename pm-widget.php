@@ -1,6 +1,6 @@
 <?php
 
-/*  Copyright 2011-2012 Aito Software Inc. (email : contact@aitosoftware.com)
+/*  Copyright 2011-2013 Aito Software Inc. (email : contact@aitosoftware.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -47,10 +47,7 @@ class PulseMapsWidget extends WP_Widget {
 			$url .= "&color=$color&bgcolor=$bgcolor$extra";
 		}
 		$url .= '&meta=' . $opts['widget_meta'];
-
-		if ($opts['track_all'] || is_user_logged_in()) {
-			$url .= '&notrack=1';
-		}
+		$url .= '&notrack=1';
 
 		if (!$opts['widget_dots']) {
 			$url .= '&nodots=1';
