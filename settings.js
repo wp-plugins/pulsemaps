@@ -113,7 +113,7 @@ pulsemaps.loadInfo = function() {
 
 
 jQuery(document).ready(function() {
-	if (pulsemaps_data ) {
+	if (typeof pulsemaps_data !== 'undefined') {
 		var url = pulsemaps_data.url;
 		var id = pulsemaps_data.id;
 		url += '/widget.js?id=' + id + '&notrack=1&target=widget-preview';

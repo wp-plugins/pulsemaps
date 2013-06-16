@@ -3,7 +3,7 @@
 Plugin Name: PulseMaps
 Plugin URI: http://pulsemaps.com/wordpress/
 Description: See where your visitors come from on the world map.
-Version: 1.7
+Version: 1.7.2
 Author: Aito Software Inc.
 License: GPLv2 or later
 */

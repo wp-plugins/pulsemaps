@@ -7,7 +7,7 @@ Donate link: http://pulsemaps.com/pricing/
 Tags: visitor map, world map, heat map, traffic counter, traffic widget, visitors counter, hit counter, geo, geolocation, location, country, stats, widget, visitors, density map, analytics
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 
 Show off your website visitors on the world map. When people around the world visit your blog, the corresponding areas on the heat map widget light up!
 
@@ -56,6 +56,14 @@ The widget has been tested to work on all major browsers, such as Internet Explo
 PHP 5 is required.
 
 == Changelog ==
+
+= 1.7.2 =
+
+* Bug fixes.
+
+= 1.7.1 =
+
+* Not released.
 
 = 1.7 =
 
