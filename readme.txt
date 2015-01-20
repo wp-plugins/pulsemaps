@@ -1,6 +1,6 @@
 === PulseMaps Visitor World Map ===
-Contributors: aitosoftware
-Author: aitosoftware (Aito Software Inc.)
+Contributors: Webmaster-Tools
+Author: Webmaster-Tools
 Author URI: http://pulsemaps.com/
 Plugin URI: http://pulsemaps.com/wordpress/
 Donate link: http://pulsemaps.com/pricing/
